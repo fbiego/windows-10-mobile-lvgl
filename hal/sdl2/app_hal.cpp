@@ -1,0 +1,101 @@
+#include <unistd.h>
+#include <ctime>
+#include <cstring>
+#include <stdio.h>
+#define SDL_MAIN_HANDLED /*To fix SDL's "undefined reference to WinMain" issue*/
+#include SDL_INCLUDE_PATH
+#include "display/monitor.h"
+#include "indev/mouse.h"
+#include "indev/mousewheel.h"
+#include "indev/keyboard.h"
+#include "sdl/sdl.h"
+#include "app_hal.h"
+
+#include <lvgl.h>
+
+
+static const uint32_t screenWidth = SDL_HOR_RES;
+static const uint32_t screenHeight = SDL_VER_RES;
+
+
+/**
+ * A task to measure the elapsed time for LittlevGL
+ * @param data unused
+ * @return never return
+ */
+static int tick_thread(void *data)
+{
+    (void)data;
+
+    while (1)
+    {
+        SDL_Delay(5);   /*Sleep for 5 millisecond*/
+        lv_tick_inc(5); /*Tell LittelvGL that 5 milliseconds were elapsed*/
+    }
+
+    return 0;
+}
+
+void hal_setup(void)
+{
+// Workaround for sdl2 `-m32` crash
+// https://bugs.launchpad.net/ubuntu/+source/libsdl2/+bug/1775067/comments/7
+#ifndef WIN32
+    setenv("DBUS_FATAL_WARNINGS", "0", 1);
+#endif
+
+    lv_init();
+
+    /* Add a display
+     * Use the 'monitor' driver which creates window on PC's monitor to simulate a display*/
+
+    static lv_disp_draw_buf_t disp_buf;
+    static lv_color_t buf[SDL_HOR_RES * 10];                       /*Declare a buffer for 10 lines*/
+    lv_disp_draw_buf_init(&disp_buf, buf, NULL, SDL_HOR_RES * 10); /*Initialize the display buffer*/
+
+    static lv_disp_drv_t disp_drv;
+    lv_disp_drv_init(&disp_drv);           /*Basic initialization*/
+    disp_drv.flush_cb = sdl_display_flush; /*Used when `LV_VDB_SIZE != 0` in lv_conf.h (buffered drawing)*/
+    disp_drv.draw_buf = &disp_buf;
+    disp_drv.hor_res = SDL_HOR_RES;
+    disp_drv.ver_res = SDL_VER_RES;
+    // disp_drv.disp_fill = monitor_fill;      /*Used when `LV_VDB_SIZE == 0` in lv_conf.h (unbuffered drawing)*/
+    // disp_drv.disp_map = monitor_map;        /*Used when `LV_VDB_SIZE == 0` in lv_conf.h (unbuffered drawing)*/
+    lv_disp_drv_register(&disp_drv);
+
+    /* Add the mouse as input device
+     * Use the 'mouse' driver which reads the PC's mouse*/
+    static lv_indev_drv_t indev_drv;
+    lv_indev_drv_init(&indev_drv); /*Basic initialization*/
+    indev_drv.type = LV_INDEV_TYPE_POINTER;
+    indev_drv.read_cb = sdl_mouse_read; /*This function will be called periodically (by the library) to get the mouse position and state*/
+    lv_indev_drv_register(&indev_drv);
+
+    sdl_init();
+
+    lv_obj_t *label1 = lv_label_create(lv_scr_act());
+    lv_obj_align(label1, LV_ALIGN_TOP_MID, 0, 100);
+    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);
+    lv_obj_set_width(label1, screenWidth - 30);
+    lv_label_set_text(label1, "Hello there! SDL2 LVGL native test\n"
+                              "You should be able to move the slider below");
+
+    /*Create a slider below the label*/
+    lv_obj_t *slider1 = lv_slider_create(lv_scr_act());
+    lv_obj_set_width(slider1, screenWidth - 40);
+    lv_obj_align_to(slider1, label1, LV_ALIGN_OUT_BOTTOM_MID, 0, 50);
+
+    /* Tick init.
+     * You have to call 'lv_tick_inc()' in periodically to inform LittelvGL about how much time were elapsed
+     * Create an SDL thread to do this*/
+    SDL_CreateThread(tick_thread, "tick", NULL);
+}
+
+void hal_loop(void)
+{
+    while (1)
+    {
+        SDL_Delay(5);
+        lv_task_handler();
+    }
+}
