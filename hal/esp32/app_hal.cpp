@@ -5,6 +5,8 @@
 #include <Timber.h>
 #include "app_hal.h"
 
+#include "ui/ui.h"
+
 #ifdef PLUS
 #define SCR 30
 #define BOARD BOARD_SC01_PLUS
@@ -92,17 +94,8 @@ void hal_setup()
     indev_drv.read_cb = my_touchpad_read;
     lv_indev_drv_register(&indev_drv);
 
-    lv_obj_t *label1 = lv_label_create(lv_scr_act());
-    lv_obj_align(label1, LV_ALIGN_TOP_MID, 0, 100);
-    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);
-    lv_obj_set_width(label1, screenWidth - 30);
-    lv_label_set_text(label1, "Hello there! WT32 LVGL test code\n"
-                              "You should be able to move the slider below");
+    ui_init();
 
-    /*Create a slider below the label*/
-    lv_obj_t *slider1 = lv_slider_create(lv_scr_act());
-    lv_obj_set_width(slider1, screenWidth - 40);
-    lv_obj_align_to(slider1, label1, LV_ALIGN_OUT_BOTTOM_MID, 0, 50);
 
     Timber.i("Setup done");
 }

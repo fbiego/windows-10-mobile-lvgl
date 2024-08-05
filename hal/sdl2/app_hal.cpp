@@ -13,6 +13,8 @@
 
 #include <lvgl.h>
 
+#include "ui/ui.h"
+
 
 static const uint32_t screenWidth = SDL_HOR_RES;
 static const uint32_t screenHeight = SDL_VER_RES;
@@ -73,17 +75,7 @@ void hal_setup(void)
 
     sdl_init();
 
-    lv_obj_t *label1 = lv_label_create(lv_scr_act());
-    lv_obj_align(label1, LV_ALIGN_TOP_MID, 0, 100);
-    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);
-    lv_obj_set_width(label1, screenWidth - 30);
-    lv_label_set_text(label1, "Hello there! SDL2 LVGL native test\n"
-                              "You should be able to move the slider below");
-
-    /*Create a slider below the label*/
-    lv_obj_t *slider1 = lv_slider_create(lv_scr_act());
-    lv_obj_set_width(slider1, screenWidth - 40);
-    lv_obj_align_to(slider1, label1, LV_ALIGN_OUT_BOTTOM_MID, 0, 50);
+    ui_init();
 
     /* Tick init.
      * You have to call 'lv_tick_inc()' in periodically to inform LittelvGL about how much time were elapsed
