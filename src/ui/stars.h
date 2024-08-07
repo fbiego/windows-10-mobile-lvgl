@@ -12,7 +12,8 @@ extern "C" {
 
 // TODO (add github avatars) default: ui_img_stars_ic_png
 user_info_t users[] = {
-		
+    {"fbiego",  &ui_img_stars_ic_png},
+	
 };
 
 #ifdef __cplusplus
