@@ -19,6 +19,8 @@
 static const uint32_t screenWidth = SDL_HOR_RES;
 static const uint32_t screenHeight = SDL_VER_RES;
 
+const char *daysWk[7] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
+const char *months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
 /**
  * A task to measure the elapsed time for LittlevGL
@@ -89,5 +91,24 @@ void hal_loop(void)
     {
         SDL_Delay(5);
         lv_task_handler();
+
+        time_t now = time(0);
+        tm *ltm = localtime(&now);
+
+        // Extract time fields
+        int second = ltm->tm_sec;
+        int minute = ltm->tm_min;
+        int hour = ltm->tm_hour;
+        bool am = hour < 12;
+        int day = ltm->tm_mday;
+        int month = 1 + ltm->tm_mon;    // Month starts from 0
+        int year = 1900 + ltm->tm_year; // Year is since 1900
+        int weekday = ltm->tm_wday;
+
+
+        lv_label_set_text_fmt(ui_statusPanelTime, "%02d:%02d", hour, minute);
+        lv_label_set_text_fmt(ui_Label41, "%02d:%02d", hour, minute);
+        lv_label_set_text_fmt(ui_Label39, "%s, %s %d", daysWk[weekday % 7], months[(month - 1) % 12], day);
+
     }
 }

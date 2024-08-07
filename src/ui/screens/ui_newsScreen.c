@@ -9,6 +9,8 @@ void ui_newsScreen_screen_init(void)
 {
     ui_newsScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_newsScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_newsScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_newsScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_appTitlePanel1 = lv_obj_create(ui_newsScreen);
     lv_obj_set_width(ui_appTitlePanel1, 320);
@@ -289,7 +291,7 @@ void ui_newsScreen_screen_init(void)
     lv_obj_set_height(ui_Label46, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_Label46, LV_ALIGN_CENTER);
     lv_label_set_text(ui_Label46,
-                      "The Chronos app has reached an impressive milestone with over\n50,000 downloads on Google Play. The app's popularity continues to grow as it offers users innovative time-tracking and productivity features, solidifying its place in the market.\n-----------------------------\nGoogle Play: Chronos");
+                      "Chronos, a smartwatch companion app, has reached an impressive milestone with over \n50,000 downloads on Google Play. Offering custom notifications and robust features absent in the original Wearfit Pro app from the watch manufacturer, Chronos continues to grow in popularity among smartwatch users, solidifying its place in the market.\n-----------------------------\nGoogle Play: Chronos");
     lv_obj_set_style_text_font(ui_Label46, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Panel17 = lv_obj_create(ui_settingsMainPanel1);
@@ -409,5 +411,7 @@ void ui_newsScreen_screen_init(void)
     lv_obj_set_style_text_font(ui_Label47, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_appTitleIcon1, ui_event_appTitleIcon1, LV_EVENT_ALL, NULL);
+
+    lv_obj_add_event_cb(ui_newsScreen, ui_event_screen_load, LV_EVENT_SCREEN_LOADED, NULL);
 
 }

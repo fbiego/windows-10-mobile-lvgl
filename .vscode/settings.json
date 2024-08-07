@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.embeddedhtml": "html",
+        "random": "c",
+        "limits": "c"
+    }
+}

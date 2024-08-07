@@ -9,35 +9,55 @@ void ui_settingsScreen_screen_init(void)
 {
     ui_settingsScreen = lv_obj_create(NULL);
     lv_obj_clear_flag(ui_settingsScreen, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_bg_color(ui_settingsScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_settingsScreen, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_appTitlePanel2 = lv_obj_create(ui_settingsScreen);
-    lv_obj_set_width(ui_appTitlePanel2, 320);
-    lv_obj_set_height(ui_appTitlePanel2, 70);
-    lv_obj_set_align(ui_appTitlePanel2, LV_ALIGN_TOP_MID);
-    lv_obj_clear_flag(ui_appTitlePanel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_appTitlePanel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_appTitlePanel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_settingsTitlePanel = lv_obj_create(ui_settingsScreen);
+    lv_obj_set_width(ui_settingsTitlePanel, 320);
+    lv_obj_set_height(ui_settingsTitlePanel, 70);
+    lv_obj_set_align(ui_settingsTitlePanel, LV_ALIGN_TOP_MID);
+    lv_obj_set_flex_flow(ui_settingsTitlePanel, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(ui_settingsTitlePanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_END);
+    lv_obj_clear_flag(ui_settingsTitlePanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_settingsTitlePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_settingsTitlePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_settingsTitlePanel, 15, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_settingsTitlePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_settingsTitlePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_settingsTitlePanel, 8, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_row(ui_settingsTitlePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_column(ui_settingsTitlePanel, 12, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_appTitleName2 = lv_label_create(ui_appTitlePanel2);
-    lv_obj_set_width(ui_appTitleName2, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_appTitleName2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_appTitleName2, 52);
-    lv_obj_set_y(ui_appTitleName2, 10);
-    lv_obj_set_align(ui_appTitleName2, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_appTitleName2, "Settings");
-    lv_obj_set_style_text_font(ui_appTitleName2, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_settingsBack = lv_img_create(ui_settingsTitlePanel);
+    lv_img_set_src(ui_settingsBack, &ui_img_settings_back_png);
+    lv_obj_set_width(ui_settingsBack, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_settingsBack, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_settingsBack, LV_ALIGN_CENTER);
+    lv_obj_add_flag(ui_settingsBack, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST | LV_OBJ_FLAG_HIDDEN);     /// Flags
+    lv_obj_clear_flag(ui_settingsBack, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_img_recolor(ui_settingsBack, lv_color_hex(0x2061E6), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_img_recolor_opa(ui_settingsBack, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_appTitleIcon2 = lv_img_create(ui_appTitlePanel2);
-    lv_img_set_src(ui_appTitleIcon2, &ui_img_wp_settings_png);
-    lv_obj_set_width(ui_appTitleIcon2, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_appTitleIcon2, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_appTitleIcon2, 10);
-    lv_obj_set_y(ui_appTitleIcon2, 10);
-    lv_obj_set_align(ui_appTitleIcon2, LV_ALIGN_LEFT_MID);
-    lv_obj_add_flag(ui_appTitleIcon2, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_appTitleIcon2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_img_recolor(ui_appTitleIcon2, lv_color_hex(0x2062E3), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_img_recolor_opa(ui_appTitleIcon2, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_settingsAppIcon = lv_img_create(ui_settingsTitlePanel);
+    lv_img_set_src(ui_settingsAppIcon, &ui_img_wp_settings_png);
+    lv_obj_set_width(ui_settingsAppIcon, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_settingsAppIcon, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_settingsAppIcon, 10);
+    lv_obj_set_y(ui_settingsAppIcon, 10);
+    lv_obj_set_align(ui_settingsAppIcon, LV_ALIGN_LEFT_MID);
+    lv_obj_add_flag(ui_settingsAppIcon, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_settingsAppIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_img_recolor(ui_settingsAppIcon, lv_color_hex(0x2062E3), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_img_recolor_opa(ui_settingsAppIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    ui_settingsAppTitle = lv_label_create(ui_settingsTitlePanel);
+    lv_obj_set_width(ui_settingsAppTitle, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_settingsAppTitle, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_settingsAppTitle, 52);
+    lv_obj_set_y(ui_settingsAppTitle, 10);
+    lv_obj_set_align(ui_settingsAppTitle, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_settingsAppTitle, "Settings");
+    lv_obj_set_style_text_font(ui_settingsAppTitle, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_settingsMainPanel = lv_obj_create(ui_settingsScreen);
     lv_obj_set_width(ui_settingsMainPanel, 320);
@@ -47,69 +67,96 @@ void ui_settingsScreen_screen_init(void)
     lv_obj_set_align(ui_settingsMainPanel, LV_ALIGN_TOP_MID);
     lv_obj_set_flex_flow(ui_settingsMainPanel, LV_FLEX_FLOW_COLUMN);
     lv_obj_set_flex_align(ui_settingsMainPanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_settingsMainPanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_scrollbar_mode(ui_settingsMainPanel, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(ui_settingsMainPanel, LV_DIR_VER);
     lv_obj_set_style_radius(ui_settingsMainPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui_settingsMainPanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_settingsMainPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_settingsMainPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_settingsMainPanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_settingsMainPanel, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_TextArea1 = lv_textarea_create(ui_settingsMainPanel);
-    lv_obj_set_width(ui_TextArea1, 300);
-    lv_obj_set_height(ui_TextArea1, LV_SIZE_CONTENT);    /// 70
-    lv_obj_set_x(ui_TextArea1, 0);
-    lv_obj_set_y(ui_TextArea1, -145);
-    lv_obj_set_align(ui_TextArea1, LV_ALIGN_CENTER);
-    lv_textarea_set_placeholder_text(ui_TextArea1, "Find a setting");
-    lv_obj_set_style_radius(ui_TextArea1, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_TextArea1, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_TextArea1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_color(ui_TextArea1, lv_color_hex(0x70A2EF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_TextArea1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_personalizationPanel = lv_obj_create(ui_settingsScreen);
+    lv_obj_set_width(ui_personalizationPanel, 320);
+    lv_obj_set_height(ui_personalizationPanel, 410);
+    lv_obj_set_x(ui_personalizationPanel, 0);
+    lv_obj_set_y(ui_personalizationPanel, 70);
+    lv_obj_set_align(ui_personalizationPanel, LV_ALIGN_TOP_MID);
+    lv_obj_set_flex_flow(ui_personalizationPanel, LV_FLEX_FLOW_COLUMN);
+    lv_obj_add_flag(ui_personalizationPanel, LV_OBJ_FLAG_ADV_HITTEST | LV_OBJ_FLAG_HIDDEN);     /// Flags
+    lv_obj_set_flex_align(ui_personalizationPanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_scrollbar_mode(ui_personalizationPanel, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(ui_personalizationPanel, LV_DIR_VER);
+    lv_obj_set_style_radius(ui_personalizationPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_personalizationPanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_personalizationPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_personalizationPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_personalizationPanel, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_personalizationPanel, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_personalizationPanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_personalizationPanel, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 
+    ui_themePanel = lv_obj_create(ui_personalizationPanel);
+    lv_obj_set_width(ui_themePanel, 225);
+    lv_obj_set_height(ui_themePanel, 280);
+    lv_obj_set_align(ui_themePanel, LV_ALIGN_CENTER);
+    lv_obj_set_flex_flow(ui_themePanel, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(ui_themePanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_clear_flag(ui_themePanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_themePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_themePanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_themePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_themePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_themePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_themePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_themePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_themePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_row(ui_themePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_column(ui_themePanel, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Panel2 = lv_obj_create(ui_settingsMainPanel);
-    lv_obj_set_width(ui_Panel2, 320);
-    lv_obj_set_height(ui_Panel2, 50);
-    lv_obj_set_x(ui_Panel2, 0);
-    lv_obj_set_y(ui_Panel2, -97);
-    lv_obj_set_align(ui_Panel2, LV_ALIGN_CENTER);
-    lv_obj_clear_flag(ui_Panel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_radius(ui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_color(ui_Panel2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui_Panel2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Image1 = lv_img_create(ui_Panel2);
-    lv_img_set_src(ui_Image1, &ui_img_wp_system_png);
-    lv_obj_set_width(ui_Image1, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Image1, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Image1, 5);
-    lv_obj_set_y(ui_Image1, 0);
-    lv_obj_set_align(ui_Image1, LV_ALIGN_LEFT_MID);
-    lv_obj_add_flag(ui_Image1, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_Image1, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
-    lv_obj_set_style_img_recolor(ui_Image1, lv_color_hex(0x2D87E1), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_img_recolor_opa(ui_Image1, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_backgroundSelect = lv_obj_create(ui_personalizationPanel);
+    lv_obj_set_width(ui_backgroundSelect, 280);
+    lv_obj_set_height(ui_backgroundSelect, 215);
+    lv_obj_set_x(ui_backgroundSelect, 0);
+    lv_obj_set_y(ui_backgroundSelect, 23);
+    lv_obj_set_align(ui_backgroundSelect, LV_ALIGN_CENTER);
+    lv_obj_set_flex_flow(ui_backgroundSelect, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(ui_backgroundSelect, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_clear_flag(ui_backgroundSelect, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_backgroundSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_backgroundSelect, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_backgroundSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_backgroundSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_backgroundSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_backgroundSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_backgroundSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_backgroundSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_row(ui_backgroundSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_column(ui_backgroundSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Label3 = lv_label_create(ui_Panel2);
-    lv_obj_set_width(ui_Label3, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label3, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label3, 50);
-    lv_obj_set_y(ui_Label3, 10);
-    lv_obj_set_align(ui_Label3, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_Label3, "Display, notifications, battery");
-    lv_obj_set_style_text_font(ui_Label3, &lv_font_montserrat_12, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_lockscreenSelect = lv_obj_create(ui_personalizationPanel);
+    lv_obj_set_width(ui_lockscreenSelect, 280);
+    lv_obj_set_height(ui_lockscreenSelect, 215);
+    lv_obj_set_x(ui_lockscreenSelect, 0);
+    lv_obj_set_y(ui_lockscreenSelect, 23);
+    lv_obj_set_align(ui_lockscreenSelect, LV_ALIGN_CENTER);
+    lv_obj_set_flex_flow(ui_lockscreenSelect, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(ui_lockscreenSelect, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_clear_flag(ui_lockscreenSelect, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_lockscreenSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_lockscreenSelect, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_lockscreenSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_lockscreenSelect, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_lockscreenSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_lockscreenSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_lockscreenSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_lockscreenSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_row(ui_lockscreenSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_column(ui_lockscreenSelect, 5, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Label4 = lv_label_create(ui_Panel2);
-    lv_obj_set_width(ui_Label4, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_Label4, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_Label4, 50);
-    lv_obj_set_y(ui_Label4, -12);
-    lv_obj_set_align(ui_Label4, LV_ALIGN_LEFT_MID);
-    lv_label_set_text(ui_Label4, "System");
-    lv_obj_set_style_text_font(ui_Label4, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    lv_obj_add_event_cb(ui_appTitleIcon2, ui_event_appTitleIcon2, LV_EVENT_ALL, NULL);
+    lv_obj_add_event_cb(ui_settingsScreen, ui_event_screen_load, LV_EVENT_SCREEN_LOADED, NULL);
 
 }
