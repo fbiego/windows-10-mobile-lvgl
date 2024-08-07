@@ -15,7 +15,7 @@ An LVGL project to showcase the nostalgic Windows 10 Moblie user interface.
 
 #### Screenshots
 
-![Start](screenshots/cortana.png?raw=true "start")
+![Start](screenshots/start.png?raw=true "start")
 ![Lockscreen](screenshots/lockscreen.png?raw=true "lockscreen")
 ![Panel](screenshots/panel.png?raw=true "panel")
 ![Cortana](screenshots/cortana.png?raw=true "cortana")
