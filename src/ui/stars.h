@@ -12,7 +12,11 @@ extern "C" {
 
 // TODO (add github avatars) default: ui_img_stars_ic_png
 user_info_t users[] = {
-    {"fbiego",  &ui_img_stars_ic_png},
+    {"Bamamou",  &ui_img_stars_ic_png},
+	{"HanksJCTsai",  &ui_img_stars_ic_png},
+	{"fbiego",  &ui_img_stars_ic_png},
+	{"nccchirag",  &ui_img_stars_ic_png},
+	{"the-this-pointer",  &ui_img_stars_ic_png},
 	
 };
 
