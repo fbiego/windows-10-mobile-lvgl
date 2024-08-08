@@ -70,14 +70,14 @@ def generate_list(path):
         stargazers = fetch_all_stargazers(API_URL)
 
         # Sort stargazers alphabetically by username
-        stargazers_sorted = sorted(stargazers, key=lambda user: user['login'])
+        stargazers_sorted = sorted(stargazers, key=lambda user: user['login'].lower())
 
 
         list_users = ""
         image = ""
 
         for user in stargazers_sorted:
-            list_users = list_users + "{\"" + user['login'] + "\",  &ui_img_stars_ic_png}," + "\n\t"
+            list_users = list_users + "{\"" + user['login'] + "\",  NULL}," + "\n\t"
 
 
 
@@ -94,7 +94,7 @@ extern "C" {{
 
 #include "ui_common.h"
 
-// TODO (add github avatars) default: ui_img_stars_ic_png
+// TODO (add github avatars) default: NULL
 user_info_t users[] = {{
     {list_users}
 }};

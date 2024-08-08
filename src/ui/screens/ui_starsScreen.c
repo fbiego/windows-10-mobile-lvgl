@@ -76,6 +76,23 @@ void ui_starsScreen_screen_init(void)
     lv_label_set_text(ui_Label7, "Total Stars: 2");
     lv_obj_set_style_text_font(ui_Label7, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_stargazersPanel = lv_obj_create(ui_starsMainPanel);
+    lv_obj_set_width(ui_stargazersPanel, 280);
+    lv_obj_set_height(ui_stargazersPanel, LV_SIZE_CONTENT);
+    lv_obj_set_align(ui_stargazersPanel, LV_ALIGN_TOP_MID);
+    lv_obj_set_flex_flow(ui_stargazersPanel, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_flex_align(ui_stargazersPanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_scrollbar_mode(ui_stargazersPanel, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(ui_stargazersPanel, LV_DIR_VER);
+    lv_obj_set_style_radius(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_stargazersPanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_stargazersPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
 
     lv_obj_add_event_cb(ui_starsScreen, ui_event_screen_load, LV_EVENT_SCREEN_LOADED, NULL);
 

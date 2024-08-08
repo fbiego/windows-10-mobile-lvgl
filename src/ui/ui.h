@@ -222,6 +222,7 @@ extern lv_obj_t *ui_starsTitleName;
 // void ui_event_starsTitleIcon(lv_event_t * e);
 extern lv_obj_t *ui_starsTitleIcon;
 extern lv_obj_t *ui_starsMainPanel;
+extern lv_obj_t *ui_stargazersPanel;
 extern lv_obj_t *ui_Label23;
 extern lv_obj_t *ui_Label7;
 extern lv_obj_t *ui_Panel28;

@@ -161,6 +161,7 @@ lv_obj_t *ui_starsTitleName;
 // void ui_event_starsTitleIcon(lv_event_t * e);
 lv_obj_t *ui_starsTitleIcon;
 lv_obj_t *ui_starsMainPanel;
+lv_obj_t *ui_stargazersPanel;
 lv_obj_t *ui_Label23;
 lv_obj_t *ui_Label7;
 lv_obj_t *ui_Panel28;
@@ -1302,7 +1303,7 @@ void init_custom(void)
     lv_label_set_text_fmt(ui_Label7, "Total Stars: %d", stars);
     for (int i = 0; i < stars; i++)
     {
-        cm_user_list(ui_starsMainPanel, users[i]);
+        cm_user_list(ui_stargazersPanel, users[i]);
     }
     register_img(ui_starsTitleIcon);
 
