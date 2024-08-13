@@ -61,13 +61,13 @@ void ui_starsScreen_screen_init(void)
     lv_obj_set_style_pad_row(ui_starsMainPanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_column(ui_starsMainPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_Label23 = lv_label_create(ui_starsMainPanel);
-    lv_obj_set_width(ui_Label23, 280);
-    lv_obj_set_height(ui_Label23, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_Label23, LV_ALIGN_CENTER);
-    lv_label_set_text(ui_Label23,
+    ui_starsInfo = lv_label_create(ui_starsMainPanel);
+    lv_obj_set_width(ui_starsInfo, 280);
+    lv_obj_set_height(ui_starsInfo, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_align(ui_starsInfo, LV_ALIGN_CENTER);
+    lv_label_set_text(ui_starsInfo,
                       "The list below is generated before compilation from Github stars API using a pre-build script on PlatformIO IDE.");
-    lv_obj_set_style_text_font(ui_Label23, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui_starsInfo, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     ui_Label7 = lv_label_create(ui_starsMainPanel);
     lv_obj_set_width(ui_Label7, 280);

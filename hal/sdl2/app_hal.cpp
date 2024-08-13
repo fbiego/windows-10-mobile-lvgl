@@ -2,6 +2,8 @@
 #include <ctime>
 #include <cstring>
 #include <stdio.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 #define SDL_MAIN_HANDLED /*To fix SDL's "undefined reference to WinMain" issue*/
 #include SDL_INCLUDE_PATH
 #include "display/monitor.h"
@@ -14,6 +16,7 @@
 #include <lvgl.h>
 
 #include "ui/ui.h"
+#include "prefs.h"
 
 
 static const uint32_t screenWidth = SDL_HOR_RES;
@@ -40,8 +43,119 @@ static int tick_thread(void *data)
     return 0;
 }
 
+/* Mouse read callback for SDL */
+void sdl_mouse_read2(lv_indev_drv_t *indev_drv, lv_indev_data_t *data)
+{
+    /*Get the current position and the state of the mouse*/
+    int32_t x, y;
+    uint32_t state = SDL_GetMouseState(&x, &y);
+
+    /*Set the coordinates and the pressed state*/
+    data->point.x = x;
+    data->point.y = y;
+
+    /*Button state: 1: pressed, 0: released*/
+    data->state = state ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL;
+
+    // return false; /*No buffering now so no more data read*/
+}
+
+void takeScreenshot(int width, int height) {
+    // Create a surface to hold the screenshot
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, width, height, 32,
+                                                0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+    if (surface == NULL) {
+        fprintf(stderr, "Failed to create surface for screenshot: %s\n", SDL_GetError());
+        show_alert("Error", "Failed to create surface for screenshot");
+        return;
+    }
+
+    // Read pixels from the current framebuffer
+    if (SDL_RenderReadPixels(SDL_GetRenderer(SDL_GetWindowFromID(1)), NULL, SDL_PIXELFORMAT_ARGB8888, surface->pixels, surface->pitch) != 0) {
+        fprintf(stderr, "Failed to read pixels for screenshot: %s\n", SDL_GetError());
+        show_alert("Error", "Failed to read pixels for screenshot");
+        SDL_FreeSurface(surface);
+        return;
+    }
+
+    const char* folder_name = "img";
+
+    // Create the folder if it doesn't exist
+    struct stat st = {0};
+    if (stat(folder_name, &st) == -1) {
+        if (mkdir(folder_name) != 0) {
+            fprintf(stderr, "Failed to create directory: %s\n", folder_name);
+            show_alert("Error", "Failed to create directory");
+            SDL_FreeSurface(surface);
+            return;
+        }
+    }
+
+    // Create a filename for the screenshot
+    time_t now = time(0);
+    tm *ltm = localtime(&now);
+
+    char filename[50];
+    snprintf(filename, sizeof(filename), "%s/screenshot-%02d-%02d-%02d.bmp", folder_name, ltm->tm_hour, ltm->tm_min, ltm->tm_sec);
+
+    // Save the surface as a BMP image
+    if (SDL_SaveBMP(surface, filename) != 0) {
+        fprintf(stderr, "Failed to save screenshot: %s\n", SDL_GetError());
+        show_alert("Error", "Failed to save screenshot");
+        SDL_FreeSurface(surface);
+        return;
+    }
+
+    printf("Screenshot saved as %s\n", filename);
+    show_alert("Screenshot", "Screenshot saved to img folder");
+
+    // Free the surface
+    SDL_FreeSurface(surface);
+}
+
+
+void setPrefBool(const char *key, bool value)
+{
+    savePrefBool(key, value);
+}
+void setPrefInt(const char *key, uint32_t value)
+{
+    savePrefInt(key, value);
+}
+
+uint32_t getPrefInt(const char *key, uint32_t def)
+{
+    uint32_t v;
+    if (readPrefInt(key, &v)){
+        return v;
+    }
+    return def;
+}
+bool getPrefBool(const char *key, bool def)
+{
+    bool v;
+    if (readPrefBool(key, &v)){
+        return v;
+    }
+    return def;
+
+}
+
+void onBrightnessChange(int32_t value) 
+{
+    savePrefInt("brightness", value);
+}
+void onTimeoutChange(int16_t selected) 
+{
+    savePrefInt("timeout", selected);
+}
+
 void hal_setup(void)
 {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        fprintf(stderr, "SDL_Init Error: %s\n", SDL_GetError());
+        return;
+    }
 // Workaround for sdl2 `-m32` crash
 // https://bugs.launchpad.net/ubuntu/+source/libsdl2/+bug/1775067/comments/7
 #ifndef WIN32
@@ -72,7 +186,7 @@ void hal_setup(void)
     static lv_indev_drv_t indev_drv;
     lv_indev_drv_init(&indev_drv); /*Basic initialization*/
     indev_drv.type = LV_INDEV_TYPE_POINTER;
-    indev_drv.read_cb = sdl_mouse_read; /*This function will be called periodically (by the library) to get the mouse position and state*/
+    indev_drv.read_cb = sdl_mouse_read2; /*This function will be called periodically (by the library) to get the mouse position and state*/
     lv_indev_drv_register(&indev_drv);
 
     sdl_init();
@@ -87,9 +201,44 @@ void hal_setup(void)
 
 void hal_loop(void)
 {
+    SDL_Event event;
+
     while (1)
     {
         SDL_Delay(5);
+        while (SDL_PollEvent(&event))
+        {
+            switch (event.type)
+            {
+                case SDL_QUIT:
+                    // Handle quit event (e.g., user closes the window)
+                    // You might want to add code to gracefully exit your program here
+                    break;
+                case SDL_KEYDOWN:
+                    // Handle key press event
+                    // SDL_KEYDOWN event occurs when a key is pressed
+                    // You can get the pressed key using event.key.keysym.sym
+                    switch (event.key.keysym.sym)
+                    {
+                        // Example for handling specific keys
+                        case SDLK_UP:
+                            // Handle the up arrow key press
+                            break;
+                        case SDLK_DOWN:
+                            // Handle the down arrow key press
+                            break;
+                        case SDLK_s:
+                            takeScreenshot(SDL_HOR_RES, SDL_VER_RES);
+                            break;
+                    }
+                    break;
+                case SDL_KEYUP:
+                    // Handle key release event if needed
+                    // SDL_KEYUP event occurs when a key is released
+                    break;
+            }
+        }
+
         lv_task_handler();
 
         time_t now = time(0);

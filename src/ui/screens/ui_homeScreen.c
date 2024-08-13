@@ -330,20 +330,31 @@ void ui_homeScreen_screen_init(void)
     lv_obj_set_style_bg_opa(ui_statusPanelLeft, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui_statusPanelLeft, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_statusPanelCellular = lv_img_create(ui_statusPanelLeft);
-    lv_img_set_src(ui_statusPanelCellular, &ui_img_cellular_ic_png);
-    lv_obj_set_width(ui_statusPanelCellular, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_statusPanelCellular, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_align(ui_statusPanelCellular, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_statusPanelCellular, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
-    lv_obj_clear_flag(ui_statusPanelCellular, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    ui_statusCellularBar = lv_bar_create(ui_statusPanelLeft);
+    lv_bar_set_range(ui_statusCellularBar, 0, 10);
+    lv_bar_set_value(ui_statusCellularBar, 4, LV_ANIM_OFF);
+    lv_bar_set_start_value(ui_statusCellularBar, 0, LV_ANIM_OFF);
+    lv_obj_set_width(ui_statusCellularBar, 16);
+    lv_obj_set_height(ui_statusCellularBar, 16);
+    lv_obj_set_align(ui_statusCellularBar, LV_ALIGN_CENTER);
+    lv_obj_set_style_radius(ui_statusCellularBar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_statusCellularBar, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_statusCellularBar, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_statusCellularBar, &ui_img_cellular_ic_png, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor(ui_statusCellularBar, lv_color_hex(0x383838), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_recolor_opa(ui_statusCellularBar, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_radius(ui_statusCellularBar, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_statusCellularBar, lv_color_hex(0xFFFFFF), LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_statusCellularBar, 0, LV_PART_INDICATOR | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_img_src(ui_statusCellularBar, &ui_img_cellular_ic_png, LV_PART_INDICATOR | LV_STATE_DEFAULT);
 
     ui_statusPanelWifi = lv_img_create(ui_statusPanelLeft);
     lv_img_set_src(ui_statusPanelWifi, &ui_img_wifi_ic_png);
     lv_obj_set_width(ui_statusPanelWifi, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_statusPanelWifi, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_statusPanelWifi, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_statusPanelWifi, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_add_flag(ui_statusPanelWifi, LV_OBJ_FLAG_ADV_HITTEST | LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_clear_flag(ui_statusPanelWifi, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_statusPanelBluetooth = lv_img_create(ui_statusPanelLeft);
@@ -351,7 +362,7 @@ void ui_homeScreen_screen_init(void)
     lv_obj_set_width(ui_statusPanelBluetooth, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_statusPanelBluetooth, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_align(ui_statusPanelBluetooth, LV_ALIGN_CENTER);
-    lv_obj_add_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_add_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_ADV_HITTEST | LV_OBJ_FLAG_HIDDEN);     /// Flags
     lv_obj_clear_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_statusPanelRight = lv_obj_create(ui_statusPanel);

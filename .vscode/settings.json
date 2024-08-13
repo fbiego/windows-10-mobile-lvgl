@@ -2,6 +2,14 @@
     "files.associations": {
         "*.embeddedhtml": "html",
         "random": "c",
-        "limits": "c"
+        "limits": "c",
+        "ui.h": "c",
+        "prefs.h": "c",
+        "array": "c",
+        "memory": "c",
+        "functional": "c",
+        "tuple": "c",
+        "utility": "c",
+        "system_error": "c"
     }
 }

@@ -118,7 +118,7 @@ extern lv_obj_t *ui_Panel30;
 extern lv_obj_t *ui_Label38;
 extern lv_obj_t *ui_statusPanel;
 extern lv_obj_t *ui_statusPanelLeft;
-extern lv_obj_t *ui_statusPanelCellular;
+extern lv_obj_t *ui_statusCellularBar;
 extern lv_obj_t *ui_statusPanelWifi;
 extern lv_obj_t *ui_statusPanelBluetooth;
 void ui_event_statusPanelRight(lv_event_t *e);
@@ -151,6 +151,7 @@ extern lv_obj_t *ui_settingsBack;
 extern lv_obj_t *ui_settingsAppIcon;
 extern lv_obj_t *ui_settingsAppTitle;
 extern lv_obj_t *ui_personalizationPanel;
+extern lv_obj_t *ui_systemPanel;
 extern lv_obj_t *ui_themePanel;
 extern lv_obj_t *ui_backgroundSelect;
 extern lv_obj_t *ui_lockscreenSelect;
@@ -223,7 +224,7 @@ extern lv_obj_t *ui_starsTitleName;
 extern lv_obj_t *ui_starsTitleIcon;
 extern lv_obj_t *ui_starsMainPanel;
 extern lv_obj_t *ui_stargazersPanel;
-extern lv_obj_t *ui_Label23;
+extern lv_obj_t *ui_starsInfo;
 extern lv_obj_t *ui_Label7;
 extern lv_obj_t *ui_Panel28;
 extern lv_obj_t *ui_userPanel;
@@ -238,6 +239,15 @@ void ui_event_nav_back(lv_event_t *e);
 void ui_event_nav_search(lv_event_t *e);
 
 void show_alert(const char *title, const char *text);
+
+void setPrefBool(const char *key, bool value);
+void setPrefInt(const char *key, uint32_t value);
+
+uint32_t getPrefInt(const char *key, uint32_t def);
+bool getPrefBool(const char *key, bool def);
+
+void onBrightnessChange(int32_t value);
+void onTimeoutChange(int16_t selected);
 
 void ui_event____initial_actions0(lv_event_t *e);
 extern lv_obj_t *ui____initial_actions0;

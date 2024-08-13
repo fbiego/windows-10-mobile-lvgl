@@ -53,6 +53,14 @@ typedef struct _live_obj_t
     cm_live_dir_t dir;
 } live_obj_t;
 
+typedef struct _quick_action
+{
+    uint64_t code;
+    const char *name;
+    const lv_img_dsc_t *icon;
+    bool checkable;
+} quick_action;
+
 typedef struct _settings_info_t
 {
     uint64_t code;
@@ -73,18 +81,21 @@ typedef struct _themeable_t
     theme_type_t type;
 } themeable_t;
 
-void cm_text(lv_obj_t *parent, const char *text);
-void cm_switch(lv_obj_t *parent, const char* text, bool active, void (*callback)(lv_event_t *e));
-void cm_button(lv_obj_t *parent, const char *text);
-void cm_title(lv_obj_t *parent, const char *text);
-void cm_text_area(lv_obj_t *parent, const char *placeholder, void (*color)(lv_obj_t *obj));
-void cm_slider(lv_obj_t *parent, int value, int min, int max, void (*callback)(lv_event_t *e));
-void cm_panel_space(lv_obj_t *parent);
-void cm_bar(lv_obj_t *parent, int value);
-void cm_dropdown(lv_obj_t *parent, const char* options, int selected, int width, void (*callback)(lv_event_t *e));
+lv_obj_t *cm_create_text(lv_obj_t *parent, const char *text);
+lv_obj_t *cm_create_switch(lv_obj_t *parent, const char* text, bool active, void (*callback)(lv_event_t *e));
+lv_obj_t *cm_create_button(lv_obj_t *parent, const char *text);
+lv_obj_t *cm_create_title(lv_obj_t *parent, const char *text);
+lv_obj_t *cm_create_text_area(lv_obj_t *parent, const char *placeholder, void (*color)(lv_obj_t *obj));
+lv_obj_t *cm_create_slider(lv_obj_t *parent, int value, int min, int max, void (*callback)(lv_event_t *e));
+lv_obj_t *cm_create_panel_space(lv_obj_t *parent, int height);
+lv_obj_t *cm_create_bar(lv_obj_t *parent, int value, const char* format);
+void cm_set_bar(lv_obj_t *obj, int value, const char* format);
+lv_obj_t *cm_create_dropdown(lv_obj_t *parent, const char* options, int selected, int width, void (*callback)(lv_event_t *e));
+
+
 void cm_user_list(lv_obj_t *parent, user_info_t user);
 
-void cm_quick_action(lv_obj_t *parent, const char *name, const lv_img_dsc_t *icon, bool checkable);
+void cm_quick_action(lv_obj_t *parent, quick_action action, void (*callback)(lv_event_t *e));
 
 void cm_start_tile(start_tile_t tile, void(*callback)(live_obj_t l), void (*launcher)(lv_event_t * e), void(*start)(lv_obj_t *obj));
 void cm_app_list(app_info_t app, void(*launcher)(lv_event_t *e), void(*panel)(lv_obj_t *obj));

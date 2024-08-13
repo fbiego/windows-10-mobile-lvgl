@@ -3,6 +3,8 @@
 // LVGL version: 8.3.11
 // Project name: W10M
 
+#ifndef MIN_BG_IMG
+
 #include "../ui.h"
 
 #ifndef LV_ATTRIBUTE_MEM_ALIGN
@@ -2867,3 +2869,4 @@ const lv_img_dsc_t ui_img_img0_png = {
     .data = ui_img_img0_png_data
 };
 
+#endif

@@ -10,16 +10,18 @@ extern "C" {
 
 #include "ui_common.h"
 
-// TODO (add github avatars) default: ui_img_stars_ic_png
+// TODO (add github avatars) default: NULL
 user_info_t users[] = {
     {"Bamamou",  NULL},
-	{"HanksJCTsai",  NULL},
-	{"WDC56",  NULL},
 	{"betamoojw",  NULL},
 	{"fbiego",  NULL},
+	{"HanksJCTsai",  NULL},
 	{"hugo0406",  NULL},
+	{"MojzisekJan",  NULL},
 	{"nccchirag",  NULL},
 	{"the-this-pointer",  NULL},
+	{"TommyChou9567",  NULL},
+	{"WDC56",  NULL},
 	
 };
 

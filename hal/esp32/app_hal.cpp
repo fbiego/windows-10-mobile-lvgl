@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include <lvgl.h>
 #include "PanelLan.h"
-// #include <ChronosESP32.h>
+#include <ChronosESP32.h>
 #include <Timber.h>
+#include <Preferences.h>
 #include "app_hal.h"
 
 #include "ui/ui.h"
@@ -18,7 +19,8 @@
 #endif
 
 PanelLan tft(BOARD);
-// ChronosESP32 watch(NAME);
+ChronosESP32 watch(NAME);
+Preferences prefs;
 
 static const uint32_t screenWidth = 320;
 static const uint32_t screenHeight = 480;
@@ -57,6 +59,35 @@ void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data)
     }
 }
 
+
+void setPrefBool(const char *key, bool value)
+{
+    prefs.putBool(key, value);
+}
+void setPrefInt(const char *key, uint32_t value)
+{
+    prefs.putULong(key, value);
+}
+
+uint32_t getPrefInt(const char *key, uint32_t def)
+{
+    return prefs.getULong(key, def);
+}
+bool getPrefBool(const char *key, bool def)
+{
+    return prefs.getBool(key, def);
+}
+
+void onBrightnessChange(int32_t value) 
+{
+    tft.setBrightness(value);
+    prefs.putInt("brightness", value);
+}
+void onTimeoutChange(int16_t selected) 
+{
+
+}
+
 void logCallback(Level level, unsigned long time, String message)
 {
     Serial.print(message);
@@ -71,6 +102,8 @@ void hal_setup()
     tft.init();
     tft.initDMA();
     tft.startWrite();
+
+    prefs.begin("my-app");
 
     lv_init();
 
@@ -96,6 +129,9 @@ void hal_setup()
 
     ui_init();
 
+    watch.begin();
+    tft.setBrightness(prefs.getInt("brightness", 200));
+
 
     Timber.i("Setup done");
 }
@@ -104,4 +140,10 @@ void hal_loop()
 {
     lv_timer_handler(); /* let the GUI do its work */
     delay(5);
+
+    watch.loop();
+
+    lv_label_set_text(ui_statusPanelTime, watch.getTime("%H:%M").c_str());
+    lv_label_set_text(ui_Label41, watch.getTime("%H:%M").c_str());
+    lv_label_set_text(ui_Label39, watch.getTime("%A, %B %d").c_str());
 }
