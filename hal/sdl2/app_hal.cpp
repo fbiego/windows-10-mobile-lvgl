@@ -83,7 +83,11 @@ void takeScreenshot(int width, int height) {
     // Create the folder if it doesn't exist
     struct stat st = {0};
     if (stat(folder_name, &st) == -1) {
+#ifdef OS_WINDOWS
         if (mkdir(folder_name) != 0) {
+#else
+        if (mkdir(folder_name, 0755) != 0) {
+#endif
             fprintf(stderr, "Failed to create directory: %s\n", folder_name);
             show_alert("Error", "Failed to create directory");
             SDL_FreeSurface(surface);

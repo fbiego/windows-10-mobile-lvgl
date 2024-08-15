@@ -5,11 +5,12 @@
 extern "C" {
 #endif
 
-
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <sys/stat.h>
 
 #define MAX_LINE_LENGTH 100
 
