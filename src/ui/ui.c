@@ -194,6 +194,20 @@ lv_obj_t *ui_Panel27;
 lv_obj_t *ui_Label28;
 lv_obj_t *ui_Bar1;
 
+void ui_thermalScreen_screen_init(void);
+lv_obj_t *ui_thermalScreen;
+lv_obj_t *ui_thermalTitlePanel;
+lv_obj_t *ui_thermalAppIcon;
+lv_obj_t *ui_thermalAppTitle;
+lv_obj_t *ui_thermalPanel;
+lv_obj_t *ui_tempTextPanel;
+lv_obj_t *ui_lowTemp;
+lv_obj_t *ui_averageTemp;
+lv_obj_t *ui_highTemp;
+lv_obj_t *ui_gridTempPanel;
+bool thermal_active;
+bool thermal_status;
+
 // SCREEN: ui_newsScreen
 void ui_newsScreen_screen_init(void);
 lv_obj_t *ui_newsScreen;
@@ -245,7 +259,6 @@ const lv_img_dsc_t *ui_imgset_img[10] = {&ui_img_img0_png, &ui_img_img1_png, &ui
 #endif
 
 app_info_t apps[] = {
-    {0xAC00, "Camera", &ui_img_camera_ic_png},
     {0xA900, "Edge", &ui_img_edge_ic_png},
     {0xAE00, "Files", &ui_img_file_ic_png},
     {0xA400, "Groove Music", &ui_img_groove_ic_png},
@@ -258,6 +271,7 @@ app_info_t apps[] = {
     {0xA700, "Settings", &ui_img_wp_settings_png},
     {0xAD00, "Stars", &ui_img_stars_ic_png},
     {0xAA00, "Store", &ui_img_microsoft_ic_png},
+    {0xAC00, "Thermal IR", &ui_img_camera_ic_png},
     {0xAB00, "Tips", &ui_img_tips_ic_png},
 };
 
@@ -270,7 +284,7 @@ start_tile_t tiles[] = {
     {{0xA400, "Groove Music", &ui_img_groove_ic_png}, false, NULL, CM_LIVE_NONE},
     {{0xAB00, "Tips", &ui_img_tips_ic_png}, false, &ui_img_embedded_tile_png, CM_LIVE_HORIZONTAL},
     {{0xA500, "News", &ui_img_news_ic_png}, true, &ui_img_news_tile_png, CM_LIVE_VERTICAL},
-    {{0xAC00, "Camera", &ui_img_camera_ic_png}, false, NULL, CM_LIVE_NONE},
+    {{0xAC00, "Thermal IR", &ui_img_camera_ic_png}, false, NULL, CM_LIVE_NONE},
     {{0xA600, "Photos", &ui_img_photos_ic_png}, false, &ui_img_photo_tile_png, CM_LIVE_VERTICAL},
     {{0xAD00, "Stars", &ui_img_stars_ic_png}, false, NULL, CM_LIVE_NONE},
     {{0xA900, "Edge", &ui_img_edge_ic_png}, false, NULL, CM_LIVE_NONE},
@@ -787,6 +801,21 @@ void launch_app(lv_event_t *e)
 
     switch (code)
     {
+    case 0xAC00:
+        _ui_screen_change(&ui_thermalScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_thermalScreen_screen_init);
+        if (!thermal_status)
+        {
+            // show_alert("Thermal Camera", "Could not find a valid AMG88xx sensor, check wiring and reboot");
+            lv_label_set_text(ui_lowTemp, "Sensor");
+            lv_label_set_text(ui_averageTemp, "not");
+            lv_label_set_text(ui_highTemp, "found");
+        }
+        else
+        {
+            thermal_active = true;
+        }
+
+        break;
     case 0xA700:
         _ui_screen_change(&ui_settingsScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_settingsScreen_screen_init);
         break;
@@ -822,7 +851,6 @@ void launch_settings(lv_event_t *e)
 {
     uint64_t code = (uint64_t)lv_event_get_user_data(e);
 
-    
     lv_obj_add_flag(ui_personalizationPanel, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui_systemPanel, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
@@ -877,17 +905,23 @@ void action_event(lv_event_t *e)
     {
     case 0x00C3:
         // wifi
-        if (lv_obj_has_state(target, LV_STATE_CHECKED)){
+        if (lv_obj_has_state(target, LV_STATE_CHECKED))
+        {
             lv_obj_add_flag(ui_statusPanelWifi, LV_OBJ_FLAG_HIDDEN);
-        } else {
+        }
+        else
+        {
             lv_obj_clear_flag(ui_statusPanelWifi, LV_OBJ_FLAG_HIDDEN);
         }
         break;
     case 0x00C4:
         // bt
-        if (lv_obj_has_state(target, LV_STATE_CHECKED)){
+        if (lv_obj_has_state(target, LV_STATE_CHECKED))
+        {
             lv_obj_add_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_HIDDEN);
-        } else {
+        }
+        else
+        {
             lv_obj_clear_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_HIDDEN);
         }
         break;
@@ -897,11 +931,10 @@ void action_event(lv_event_t *e)
         lv_obj_clear_state(ui_notificationPanel, LV_STATE_CHECKED);
         _ui_screen_change(&ui_settingsScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_settingsScreen_screen_init);
         break;
-    
+
     default:
         break;
     }
-
 }
 
 void theme_change(lv_event_t *e)
@@ -1023,7 +1056,6 @@ void slider_val(lv_event_t *e)
     int32_t value = lv_slider_get_value(target);
 
     cm_set_bar(bar, value, "%d%% Slider");
-    
 }
 
 void brightness_slider(lv_event_t *e)
@@ -1032,7 +1064,6 @@ void brightness_slider(lv_event_t *e)
     int32_t value = lv_slider_get_value(target);
 
     onBrightnessChange(value);
-
 }
 
 void timeout_select(lv_event_t *e)
@@ -1171,6 +1202,18 @@ void ui_event_screen_load(lv_event_t *e)
     }
 }
 
+void ui_event_screen_unload(lv_event_t *e)
+{
+    uint64_t code = (uint64_t)lv_event_get_user_data(e);
+
+    switch (code)
+    {
+    case 0xAC00:
+        thermal_active = false;
+        break;
+    }
+}
+
 void ui_event_Panel12(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -1231,7 +1274,8 @@ void ui_event_statusPanelRight(lv_event_t *e)
     lv_obj_t *target = lv_event_get_target(e);
     if (event_code == LV_EVENT_CLICKED)
     {
-        if (!lv_obj_has_state(ui_notificationPanel, LV_STATE_CHECKED)){
+        if (!lv_obj_has_state(ui_notificationPanel, LV_STATE_CHECKED))
+        {
             openNotificationPanel_Animation(ui_notificationPanel, 0);
             lv_obj_add_state(ui_notificationPanel, LV_STATE_CHECKED);
         }
@@ -1318,6 +1362,7 @@ void ui_init(void)
     ui_appScreen_screen_init();
     ui_newsScreen_screen_init();
     ui_starsScreen_screen_init();
+    ui_thermalScreen_screen_init();
 
     init_custom();
 
@@ -1426,33 +1471,40 @@ void init_custom(void)
     cm_create_panel_space(ui_appMainPanel, 10);
     cm_create_slider(ui_appMainPanel, 0, 0, 100, slider_val);
 
+    // Thermal ir camera
 
+    for (int i = 0; i < 64; i++)
+    {
+        cm_ir_tile(ui_gridTempPanel);
+    }
 
     // Load saved preferences
 
     lv_obj_set_style_bg_img_src(ui_homeScreen, ui_imgset_img[getPrefInt("bg_img", 5) % (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0]))], LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_lockScreenPanel, ui_imgset_img[getPrefInt("lock_img", 2) % (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0]))], LV_PART_MAIN | LV_STATE_DEFAULT);
 
-
     lv_event_t e;
-    e.user_data = (void*)(uint64_t)getPrefInt("theme_color", 0x0050EF);
+    e.user_data = (void *)(uint64_t)getPrefInt("theme_color", 0x0050EF);
     theme_change(&e);
 
     e.target = navSl;
-    e.user_data = (void*)(uint64_t)getPrefInt("nav_opa", 200);
+    e.user_data = (void *)(uint64_t)getPrefInt("nav_opa", 200);
     navbar_opacity(&e);
 
     e.target = startSl;
-    e.user_data = (void*)(uint64_t)getPrefInt("start_opa", 200);
+    e.user_data = (void *)(uint64_t)getPrefInt("start_opa", 200);
     start_opacity(&e);
 
     lv_dropdown_set_selected(bgSel, getPrefInt("bg_type", 1));
     e.target = bgSel;
     background_select(&e);
 
-    if (getPrefBool("nav_tint", false)){
+    if (getPrefBool("nav_tint", false))
+    {
         lv_obj_add_state(navSw, LV_STATE_CHECKED);
-    } else {
+    }
+    else
+    {
         lv_obj_clear_state(navSw, LV_STATE_CHECKED);
     }
     e.target = navSw;
@@ -1460,6 +1512,4 @@ void init_custom(void)
 
     // e.user_data = (void*)(uint64_t)getPrefInt("start_opa", 200);
     // start_opacity(&e);
-
-
 }

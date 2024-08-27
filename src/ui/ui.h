@@ -232,8 +232,23 @@ extern lv_obj_t *ui_userAvatar;
 extern lv_obj_t *ui_userName;
 extern lv_obj_t *ui_fullName;
 
+void ui_thermalScreen_screen_init(void);
+extern lv_obj_t * ui_thermalScreen;
+extern lv_obj_t * ui_thermalTitlePanel;
+extern lv_obj_t * ui_thermalAppIcon;
+extern lv_obj_t * ui_thermalAppTitle;
+extern lv_obj_t * ui_thermalPanel;
+extern lv_obj_t * ui_tempTextPanel;
+extern lv_obj_t * ui_lowTemp;
+extern lv_obj_t * ui_averageTemp;
+extern lv_obj_t * ui_highTemp;
+extern lv_obj_t * ui_gridTempPanel;
+extern bool thermal_active;
+extern bool thermal_status;
+
 void ui_event_appListPanel(lv_event_t *e);
 void ui_event_screen_load(lv_event_t *e);
+void ui_event_screen_unload(lv_event_t *e);
 void ui_event_nav_home(lv_event_t *e);
 void ui_event_nav_back(lv_event_t *e);
 void ui_event_nav_search(lv_event_t *e);

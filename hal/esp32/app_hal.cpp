@@ -13,6 +13,8 @@
 #include <Preferences.h>
 #include "app_hal.h"
 
+#include <Adafruit_AMG88xx.h>
+
 #include "ui/ui.h"
 
 #ifdef ELECROW
@@ -143,6 +145,8 @@ PanelLan tft(BOARD);
 ChronosESP32 watch(NAME);
 Preferences prefs;
 
+Adafruit_AMG88xx amg;
+
 static const uint32_t screenWidth = 320;
 static const uint32_t screenHeight = 480;
 
@@ -150,6 +154,7 @@ static lv_disp_draw_buf_t draw_buf;
 static lv_disp_drv_t disp_drv;
 
 static lv_color_t disp_draw_buf[2][screenWidth * SCR];
+float pixels[AMG88xx_PIXEL_ARRAY_SIZE];
 
 /* Display flushing */
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
@@ -261,6 +266,8 @@ void hal_setup()
     tft.setBrightness(prefs.getInt("brightness", 200));
 
     Timber.i("Setup done");
+
+    thermal_status = amg.begin();
 }
 
 void hal_loop()
@@ -269,6 +276,41 @@ void hal_loop()
     delay(5);
 
     watch.loop();
+
+    if (thermal_active){
+        amg.readPixels(pixels);
+
+        uint32_t c = lv_obj_get_child_cnt(ui_gridTempPanel);
+        float total = 0;
+        float high = -20;
+        float low = 80;
+
+        for (int a = 0; a < c; a++){
+            total += pixels[a];
+
+            if (pixels[a] < low){
+                low = pixels[a];
+            }
+            if (pixels[a] > high){
+                high = pixels[a];
+            }
+
+            lv_color_t color = lv_color_hsv_to_rgb(lv_map(int(pixels[a]), -20, 80, 250, 359), 66, 100); //250, 359, -20, 80
+            lv_obj_t *px = lv_obj_get_child(ui_gridTempPanel, a);
+            lv_obj_set_style_bg_color(px, color, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+            if (a >= AMG88xx_PIXEL_ARRAY_SIZE){
+                break;
+            }
+        }
+        if (total != 0.0){
+            lv_label_set_text_fmt(ui_averageTemp, "Average\n%.2f°C", total / AMG88xx_PIXEL_ARRAY_SIZE);
+        } else {
+            lv_label_set_text(ui_averageTemp, "Average\nNaN");
+        }
+        lv_label_set_text_fmt(ui_lowTemp, "Low\n%.2f°C", low);
+        lv_label_set_text_fmt(ui_highTemp, "High\n%.2f°C", high);
+    }
 
     lv_label_set_text(ui_statusPanelTime, watch.getTime("%H:%M").c_str());
     lv_label_set_text(ui_Label41, watch.getTime("%H:%M").c_str());

@@ -235,6 +235,18 @@ lv_obj_t *cm_create_dropdown(lv_obj_t *parent, const char *options, int selected
     return ui_cm_dropdown;
 }
 
+
+void cm_ir_tile(lv_obj_t *parent){
+    lv_obj_t *ui_cm_panel = lv_obj_create(parent);
+    lv_obj_set_width(ui_cm_panel, 35);
+    lv_obj_set_height(ui_cm_panel, 35);
+    lv_obj_set_align(ui_cm_panel, LV_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_cm_panel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_cm_panel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_cm_panel, lv_color_hex(0xAAAAAA), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_cm_panel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_cm_panel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+}
 void cm_user_list(lv_obj_t *parent, user_info_t user)
 {
     lv_obj_t *ui_cm_user = lv_label_create(parent);

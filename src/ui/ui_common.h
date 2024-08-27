@@ -92,6 +92,8 @@ lv_obj_t *cm_create_bar(lv_obj_t *parent, int value, const char* format);
 void cm_set_bar(lv_obj_t *obj, int value, const char* format);
 lv_obj_t *cm_create_dropdown(lv_obj_t *parent, const char* options, int selected, int width, void (*callback)(lv_event_t *e));
 
+void cm_ir_tile(lv_obj_t *parent);
+
 
 void cm_user_list(lv_obj_t *parent, user_info_t user);
 
