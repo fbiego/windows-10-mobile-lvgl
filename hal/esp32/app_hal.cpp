@@ -12,6 +12,7 @@
 #include <Timber.h>
 #include <Preferences.h>
 #include "app_hal.h"
+#include "tone.h"
 
 #include <Adafruit_AMG88xx.h>
 
@@ -185,6 +186,27 @@ void my_touchpad_read(lv_indev_drv_t *indev_driver, lv_indev_data_t *data)
     }
 }
 
+void toneOut(int pitch, int duration)
+{ // pitch in Hz, duration in ms
+#if defined(BUZZER) && (BUZZER != -1)
+    int delayPeriod;
+    long cycles, i;
+
+    pinMode(BUZZER, OUTPUT);                     // turn on output pin
+    delayPeriod = (500000 / pitch) - 7;             // calc 1/2 period in us -7 for overhead
+    cycles = ((long)pitch * (long)duration) / 1000; // calc. number of cycles for loop
+
+    for (i = 0; i <= cycles; i++)
+    { // play note for duration ms
+        digitalWrite(BUZZER, HIGH);
+        delayMicroseconds(delayPeriod);
+        digitalWrite(BUZZER, LOW);
+        delayMicroseconds(delayPeriod - 1); // - 1 to make up for digitaWrite overhead
+    }
+    pinMode(BUZZER, INPUT); // shut off pin to avoid noise from other operations
+#endif
+}
+
 void setPrefBool(const char *key, bool value)
 {
     prefs.putBool(key, value);
@@ -233,6 +255,10 @@ void hal_setup()
     tft.initDMA();
     tft.startWrite();
     tft.fillScreen(TFT_BLACK);
+
+    toneOut(TONE_EN * 2, 170);
+    toneOut(TONE_FS * 2, 170);
+    toneOut(TONE_GN * 2, 170);
 
     prefs.begin("my-app");
 
@@ -295,7 +321,7 @@ void hal_loop()
                 high = pixels[a];
             }
 
-            lv_color_t color = lv_color_hsv_to_rgb(lv_map(int(pixels[a]), -20, 80, 250, 359), 66, 100); //250, 359, -20, 80
+            lv_color_t color = lv_color_hsv_to_rgb(lv_map(int(pixels[a] * 10), -200, 800, 250, 359), 66, 100); //250, 359, -20, 80
             lv_obj_t *px = lv_obj_get_child(ui_gridTempPanel, a);
             lv_obj_set_style_bg_color(px, color, LV_PART_MAIN | LV_STATE_DEFAULT);
 

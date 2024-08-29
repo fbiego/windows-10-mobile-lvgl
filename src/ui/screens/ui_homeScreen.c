@@ -166,6 +166,22 @@ void ui_homeScreen_screen_init(void)
     lv_obj_set_style_outline_width(ui_cortanaIcon, 15, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_outline_pad(ui_cortanaIcon, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_navPanelListener = lv_obj_create(ui_homeScreen);
+    lv_obj_set_width(ui_navPanelListener, 320);
+    lv_obj_set_height(ui_navPanelListener, 40);
+    lv_obj_set_align(ui_navPanelListener, LV_ALIGN_BOTTOM_MID);
+    lv_obj_set_flex_flow(ui_navPanelListener, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(ui_navPanelListener, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_clear_flag(ui_navPanelListener, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_navPanelListener, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_navPanelListener, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_navPanelListener, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_navPanelListener, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_navPanelListener, 30, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_navPanelListener, 30, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_navPanelListener, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_navPanelListener, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     ui_navPanel = lv_obj_create(ui_homeScreen);
     lv_obj_set_width(ui_navPanel, 320);
     lv_obj_set_height(ui_navPanel, 40);

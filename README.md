@@ -12,6 +12,7 @@ An LVGL project to showcase the nostalgic Windows 10 Moblie user interface.
 - Settings 
     - Personalization
 - Cortana
+- Thermal IR Camera (requires AMG88xx I2C sensor)
 
 ### Boards
 

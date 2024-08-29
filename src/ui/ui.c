@@ -70,6 +70,7 @@ lv_obj_t *ui_cortanaPanel;
 lv_obj_t *ui_TextArea3;
 lv_obj_t *ui_Label6;
 lv_obj_t *ui_cortanaIcon;
+lv_obj_t *ui_navPanelListener;
 lv_obj_t *ui_navPanel;
 lv_obj_t *ui_navBack;
 lv_obj_t *ui_navHome;
@@ -1477,6 +1478,12 @@ void init_custom(void)
     {
         cm_ir_tile(ui_gridTempPanel);
     }
+
+    // cm_create_switch(ui_gridTempPanel, "Alert Sound", true, NULL);
+    // cm_create_text(ui_gridTempPanel, "Alert Threshold");
+    // cm_create_panel_space(ui_gridTempPanel, 5);
+    // cm_create_slider(ui_gridTempPanel, false, 35, 100, NULL);
+
 
     // Load saved preferences
 

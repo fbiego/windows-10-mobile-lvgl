@@ -14,6 +14,7 @@ extern "C" {
 user_info_t users[] = {
     {"Bamamou",  NULL},
 	{"betamoojw",  NULL},
+	{"christianpiper",  NULL},
 	{"fbiego",  NULL},
 	{"HanksJCTsai",  NULL},
 	{"hugo0406",  NULL},

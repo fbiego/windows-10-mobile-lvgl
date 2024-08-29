@@ -73,6 +73,7 @@ extern lv_obj_t *ui_cortanaPanel;
 extern lv_obj_t *ui_TextArea3;
 extern lv_obj_t *ui_Label6;
 extern lv_obj_t *ui_cortanaIcon;
+extern lv_obj_t *ui_navPanelListener;
 extern lv_obj_t *ui_navPanel;
 extern lv_obj_t *ui_navBack;
 extern lv_obj_t *ui_navHome;
