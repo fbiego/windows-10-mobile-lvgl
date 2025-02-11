@@ -81,6 +81,17 @@ typedef struct _themeable_t
     theme_type_t type;
 } themeable_t;
 
+typedef struct _wifi_info_t
+{
+    int32_t rssi;
+    bool secure;
+    char name[33];
+} wifi_info_t;
+
+
+
+
+
 lv_obj_t *cm_create_text(lv_obj_t *parent, const char *text);
 lv_obj_t *cm_create_switch(lv_obj_t *parent, const char* text, bool active, void (*callback)(lv_event_t *e));
 lv_obj_t *cm_create_button(lv_obj_t *parent, const char *text);
@@ -97,7 +108,7 @@ void cm_ir_tile(lv_obj_t *parent);
 
 void cm_user_list(lv_obj_t *parent, user_info_t user);
 
-void cm_quick_action(lv_obj_t *parent, quick_action action, void (*callback)(lv_event_t *e));
+lv_obj_t * cm_quick_action(lv_obj_t *parent, quick_action action, void (*callback)(lv_event_t *e));
 
 void cm_start_tile(start_tile_t tile, void(*callback)(live_obj_t l), void (*launcher)(lv_event_t * e), void(*start)(lv_obj_t *obj));
 void cm_app_list(app_info_t app, void(*launcher)(lv_event_t *e), void(*panel)(lv_obj_t *obj));
@@ -106,7 +117,16 @@ void cm_settings_list(lv_obj_t *parent, settings_info_t setting, void (*launcher
 void cm_accent_color(lv_obj_t *parent, accent_color_t color, void (*callback)(lv_event_t *e));
 void cm_image_select(lv_obj_t *parent, const lv_img_dsc_t *img, uint64_t index, void (*callback)(lv_event_t *e));
 
+void cm_create_app_title(lv_obj_t *parent, const char * title, const lv_img_dsc_t *image);
+
 void set_parent(lv_obj_t *parent);
+
+
+
+
+void add_wifi_list(lv_obj_t *parent, wifi_info_t wifi);
+
+
 
 #ifdef __cplusplus
 } /*extern "C"*/
