@@ -12,9 +12,10 @@ extern "C"
 #endif
 
 #include "lvgl.h"
-
+#include "lvgl_private.h"
 #include "ui_helpers.h"
 #include "ui_events.h"
+#include "ui_common.h"
 
 void closeNotificationPanel_Animation(lv_obj_t *TargetObject, int delay);
 void openNotificationPanel_Animation(lv_obj_t *TargetObject, int delay);
@@ -152,6 +153,7 @@ extern lv_obj_t *ui_settingsBack;
 extern lv_obj_t *ui_settingsAppIcon;
 extern lv_obj_t *ui_settingsAppTitle;
 extern lv_obj_t *ui_personalizationPanel;
+extern lv_obj_t *ui_networkPanel;
 extern lv_obj_t *ui_systemPanel;
 extern lv_obj_t *ui_themePanel;
 extern lv_obj_t *ui_backgroundSelect;
@@ -247,12 +249,44 @@ extern lv_obj_t * ui_gridTempPanel;
 extern bool thermal_active;
 extern bool thermal_status;
 
+extern lv_obj_t * wifi_action_text;
+extern lv_obj_t * wifi_state_switch;
+
+extern lv_obj_t *ui_systemKeyboard;
+extern lv_obj_t *ui_wifiList;
+extern lv_obj_t * wifi_status;
+extern lv_obj_t * refresh_button;
+extern lv_obj_t * wifi_dialog_panel;
+extern lv_obj_t * wifi_dialog_text;
+extern lv_obj_t * wifi_dialog_textarea;
+extern lv_obj_t * button_close;
+extern lv_obj_t * button_connect;
+
 void ui_event_appListPanel(lv_event_t *e);
 void ui_event_screen_load(lv_event_t *e);
 void ui_event_screen_unload(lv_event_t *e);
 void ui_event_nav_home(lv_event_t *e);
 void ui_event_nav_back(lv_event_t *e);
 void ui_event_nav_search(lv_event_t *e);
+
+void ui_event_wifi_switch(lv_event_t *e);
+
+void init_custom(void);
+void load_prefs(void);
+
+void ui_event_app_load(lv_event_t *e);
+
+void ui_event_textarea(lv_event_t *e);
+
+void register_txta(lv_obj_t *obj);
+void register_panel(lv_obj_t *obj);
+void register_start(lv_obj_t *obj);
+
+void ui_event_wifi_item_click(lv_event_t *e);
+void ui_event_close_wifi(lv_event_t *e);
+void ui_event_connect_wifi(lv_event_t *e);
+
+void ui_event_password_mode(lv_event_t *e);
 
 void show_alert(const char *title, const char *text);
 
@@ -267,6 +301,10 @@ void onTimeoutChange(int16_t selected);
 
 void ui_event____initial_actions0(lv_event_t *e);
 extern lv_obj_t *ui____initial_actions0;
+
+typedef void (*BackButtonHandler)(void);
+
+void set_back_handler(BackButtonHandler handler);
 
 LV_IMG_DECLARE(ui_img_img5_png);               // assets/img5.png
 LV_IMG_DECLARE(ui_img_phone_ic_png);           // assets/phone_ic.png
@@ -323,6 +361,9 @@ LV_IMG_DECLARE(ui_img_img7_png);               // assets/img7.png
 LV_IMG_DECLARE(ui_img_img8_png);               // assets/img8.png
 LV_IMG_DECLARE(ui_img_img9_png);               // assets/img9.png
 LV_IMG_DECLARE(ui_img_settings_back_png);      // assets/settings_back.png
+
+LV_IMG_DECLARE( ui_img_wifi_icon_png);   // assets/wifi_icon.png
+LV_IMG_DECLARE( ui_img_padlock_png);   // assets/padlock.png
 
 void ui_init(void);
 

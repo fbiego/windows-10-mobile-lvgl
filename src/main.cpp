@@ -36,7 +36,7 @@
 #include "app_hal.h"
 
 
-#ifdef USE_SDL
+#ifdef LV_USE_SDL
 // emulator with SDL
 int main(void){
 

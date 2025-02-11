@@ -163,7 +163,7 @@ void ui_appScreen_screen_init(void)
 
     lv_obj_add_event_cb(ui_appTitleIcon, ui_event_appTitleIcon, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_genSwitch, ui_event_genSwitch, LV_EVENT_ALL, NULL);
-
+    lv_obj_add_event_cb(ui_appScreen, ui_event_app_load, LV_EVENT_ALL, NULL);
     lv_obj_add_event_cb(ui_appScreen, ui_event_screen_load, LV_EVENT_SCREEN_LOADED, NULL);
 
 }

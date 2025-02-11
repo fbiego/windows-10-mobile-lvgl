@@ -12,7 +12,12 @@ An LVGL project to showcase the nostalgic Windows 10 Moblie user interface.
 - Settings 
     - Personalization
 - Cortana
-- Thermal IR Camera (requires AMG88xx I2C sensor)
+
+###### On ESP32
+- Search & connect WiFi networks
+- Create custom apps [`sample app`](hal/esp32/apps/sample/sample.cpp)
+- Load content from API in apps
+- Load images from API (experimental)[PSRAM needed for larger images]
 
 ### Boards
 
@@ -24,15 +29,3 @@ An LVGL project to showcase the nostalgic Windows 10 Moblie user interface.
 
 ![w10m](screenshots/windows-10-mobile.png?raw=true "w10m")
 
-
-
-### SquareLine Studio
-
-Squareline studio project has been included in the repository, this however may not reflect the current state of the project due to limitations in the free tier.
-
-### Stargazers
-
-[`stars.py`](support/stars.py) script generates [`stars.h`](src/ui/stars.h) with a list of the current stargazers. This will be visible in the UI on the 'Stars app'.
-The file will be regenerated after 24 hrs from the last modification. To regenerate immediately, delete [`stars.h`](src/ui/stars.h) and build the project
-
-![Stars](screenshots/stars.png?raw=true "stars")

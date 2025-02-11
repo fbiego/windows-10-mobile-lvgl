@@ -96,6 +96,26 @@ void ui_settingsScreen_screen_init(void)
     lv_obj_set_style_pad_top(ui_personalizationPanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(ui_personalizationPanel, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
 
+    ui_networkPanel = lv_obj_create(ui_settingsScreen);
+    lv_obj_set_width(ui_networkPanel, 320);
+    lv_obj_set_height(ui_networkPanel, 410);
+    lv_obj_set_x(ui_networkPanel, 0);
+    lv_obj_set_y(ui_networkPanel, 70);
+    lv_obj_set_align(ui_networkPanel, LV_ALIGN_TOP_MID);
+    lv_obj_set_flex_flow(ui_networkPanel, LV_FLEX_FLOW_COLUMN);
+    lv_obj_add_flag(ui_networkPanel, LV_OBJ_FLAG_ADV_HITTEST | LV_OBJ_FLAG_HIDDEN);     /// Flags
+    lv_obj_set_flex_align(ui_networkPanel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_scrollbar_mode(ui_networkPanel, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_scroll_dir(ui_networkPanel, LV_DIR_VER);
+    lv_obj_set_style_radius(ui_networkPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_networkPanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_networkPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_networkPanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_networkPanel, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_networkPanel, 20, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_networkPanel, 10, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_networkPanel, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
+
     ui_systemPanel = lv_obj_create(ui_settingsScreen);
     lv_obj_set_width(ui_systemPanel, 320);
     lv_obj_set_height(ui_systemPanel, 410);

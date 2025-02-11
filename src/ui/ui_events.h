@@ -10,6 +10,14 @@
 extern "C" {
 #endif
 
+
+void onRefreshWifi();
+void onOpenNetworks();
+void onConnectWifi();
+
+void onLoadTestApp();
+void onWifiStateChange(int state);
+
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

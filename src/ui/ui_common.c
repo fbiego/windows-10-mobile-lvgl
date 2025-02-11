@@ -2,6 +2,10 @@
 
 #include "ui_common.h"
 
+
+
+
+
 lv_obj_t *cm_create_text(lv_obj_t *parent, const char *text)
 {
     lv_obj_t *ui_cm_label = lv_label_create(parent);
@@ -12,6 +16,14 @@ lv_obj_t *cm_create_text(lv_obj_t *parent, const char *text)
     lv_obj_set_style_text_font(ui_cm_label, &lv_font_montserrat_14, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     return ui_cm_label;
+}
+
+
+void ui_event_switch_text(lv_event_t *e)
+{
+    lv_obj_t *label = (lv_obj_t *)lv_event_get_user_data(e);
+    lv_obj_t *target = lv_event_get_target(e);
+    _ui_checked_set_text_value(label, target, "On", "Off");
 }
 
 lv_obj_t *cm_create_switch(lv_obj_t *parent, const char *text, bool active, void (*callback)(lv_event_t *e))
@@ -112,9 +124,18 @@ lv_obj_t *cm_create_text_area(lv_obj_t *parent, const char *placeholder, void (*
     lv_obj_set_style_bg_color(ui_cm_text_area, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui_cm_text_area, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_border_color(ui_cm_text_area, lv_color_hex(0x70A2EF), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_border_opa(ui_cm_text_area, 150, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_opa(ui_cm_text_area, 50, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_set_style_border_color(ui_cm_text_area, lv_color_hex(0x70A2EF), LV_PART_MAIN| LV_STATE_FOCUSED);
+    lv_obj_set_style_border_opa(ui_cm_text_area, 250, LV_PART_MAIN| LV_STATE_FOCUSED);
+
+    lv_obj_set_style_text_color(ui_cm_text_area, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+    
 
     color(ui_cm_text_area);
+
+    
+    lv_obj_add_event_cb(ui_cm_text_area, ui_event_textarea, LV_EVENT_ALL, NULL);
 
     return ui_cm_text_area;
 }
@@ -268,7 +289,7 @@ void cm_user_list(lv_obj_t *parent, user_info_t user)
     lv_obj_set_style_bg_opa(ui_cm_user, 150, LV_PART_MAIN | LV_STATE_PRESSED);
 }
 
-void cm_quick_action(lv_obj_t *parent, quick_action action, void (*callback)(lv_event_t *e))
+lv_obj_t * cm_quick_action(lv_obj_t *parent, quick_action action, void (*callback)(lv_event_t *e))
 {
     lv_obj_t *ui_cm_button = lv_btn_create(parent);
     lv_obj_set_width(ui_cm_button, 58);
@@ -312,6 +333,8 @@ void cm_quick_action(lv_obj_t *parent, quick_action action, void (*callback)(lv_
     lv_obj_set_style_text_font(ui_Label30, &lv_font_montserrat_10, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     lv_obj_add_event_cb(ui_cm_button, callback, action.checkable ? LV_EVENT_VALUE_CHANGED : LV_EVENT_CLICKED, (void *)action.code);
+
+    return ui_cm_button;
 }
 
 void cm_start_tile(start_tile_t tile, void (*callback)(live_obj_t l), void (*launcher)(lv_event_t *e), void (*start)(lv_obj_t *obj))
@@ -501,9 +524,97 @@ void cm_image_select(lv_obj_t *parent, const lv_img_dsc_t *img, uint64_t index, 
 void set_parent(lv_obj_t *parent)
 {
     lv_obj_set_parent(ui_cortanaPanel, parent);
+    lv_obj_set_parent(wifi_dialog_panel, parent);
+    lv_obj_set_parent(ui_systemKeyboard, parent);
     lv_obj_set_parent(ui_navPanel, parent);
     lv_obj_set_parent(ui_lockScreenPanel, parent);
     lv_obj_set_parent(ui_notificationPanel, parent);
     lv_obj_set_parent(ui_statusPanel, parent);
     lv_obj_set_parent(ui_alertPanel, parent);
+}
+
+
+void cm_create_app_title(lv_obj_t *parent, const char * title, const lv_img_dsc_t *image){
+    lv_obj_t *ui_appTitlePanel = lv_obj_create(parent);
+    lv_obj_set_width(ui_appTitlePanel, 320);
+    lv_obj_set_height(ui_appTitlePanel, 70);
+    lv_obj_set_align(ui_appTitlePanel, LV_ALIGN_TOP_MID);
+    lv_obj_clear_flag(ui_appTitlePanel, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_appTitlePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_appTitlePanel, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_t *ui_appTitleName = lv_label_create(ui_appTitlePanel);
+    lv_obj_set_width(ui_appTitleName, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_appTitleName, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_appTitleName, 52);
+    lv_obj_set_y(ui_appTitleName, 10);
+    lv_obj_set_align(ui_appTitleName, LV_ALIGN_LEFT_MID);
+    lv_label_set_text(ui_appTitleName, title);
+    lv_obj_set_style_text_font(ui_appTitleName, &lv_font_montserrat_18, LV_PART_MAIN | LV_STATE_DEFAULT);
+
+    lv_obj_t *ui_appTitleIcon = lv_img_create(ui_appTitlePanel);
+    lv_img_set_src(ui_appTitleIcon, image);
+    lv_obj_set_width(ui_appTitleIcon, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_appTitleIcon, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_appTitleIcon, 10);
+    lv_obj_set_y(ui_appTitleIcon, 10);
+    lv_obj_set_align(ui_appTitleIcon, LV_ALIGN_LEFT_MID);
+    lv_obj_add_flag(ui_appTitleIcon, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_appTitleIcon, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    // lv_obj_set_style_img_recolor(ui_appTitleIcon, lv_color_hex(0x2062E3), LV_PART_MAIN | LV_STATE_DEFAULT);
+    // lv_obj_set_style_img_recolor_opa(ui_appTitleIcon, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+}
+
+
+void add_wifi_list(lv_obj_t *parent, wifi_info_t wifi)
+{
+    lv_obj_t *ui_wifiPanel = lv_obj_create(parent);
+    lv_obj_set_width( ui_wifiPanel, 280);
+    lv_obj_set_height( ui_wifiPanel, LV_SIZE_CONTENT);   /// 50
+    lv_obj_set_align( ui_wifiPanel, LV_ALIGN_CENTER );
+    lv_obj_remove_flag( ui_wifiPanel, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+    lv_obj_set_style_radius(ui_wifiPanel, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_wifiPanel, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+    lv_obj_set_style_bg_opa(ui_wifiPanel, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_wifiPanel, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui_wifiPanel, 5, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui_wifiPanel, 5, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui_wifiPanel, 7, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui_wifiPanel, 7, LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_wifiPanel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_PRESSED );
+    lv_obj_set_style_bg_opa(ui_wifiPanel, 50, LV_PART_MAIN| LV_STATE_PRESSED);
+
+    lv_obj_t *ui_wifiIcon = lv_image_create(ui_wifiPanel);
+    lv_image_set_src(ui_wifiIcon, &ui_img_wifi_icon_png);
+    lv_obj_set_width( ui_wifiIcon, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height( ui_wifiIcon, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_align( ui_wifiIcon, LV_ALIGN_LEFT_MID );
+    lv_obj_add_flag( ui_wifiIcon, LV_OBJ_FLAG_CLICKABLE );   /// Flags
+    lv_obj_remove_flag( ui_wifiIcon, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+    lv_obj_set_style_image_recolor(ui_wifiIcon, lv_color_hex(0x000000), LV_PART_MAIN| LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui_wifiIcon, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+    lv_obj_t *ui_wifiName = lv_label_create(ui_wifiPanel);
+    lv_obj_set_width( ui_wifiName, 197);
+    lv_obj_set_height( ui_wifiName, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_x( ui_wifiName, 35 );
+    lv_obj_set_y( ui_wifiName, 0 );
+    lv_obj_set_align( ui_wifiName, LV_ALIGN_LEFT_MID );
+    lv_label_set_long_mode(ui_wifiName,LV_LABEL_LONG_SCROLL);
+    lv_label_set_text(ui_wifiName, wifi.name);
+    lv_obj_set_style_text_font(ui_wifiName, &lv_font_montserrat_22, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+    lv_obj_t *ui_wifiSecure = lv_image_create(ui_wifiPanel);
+    lv_image_set_src(ui_wifiSecure, &ui_img_padlock_png);
+    lv_obj_set_width( ui_wifiSecure, LV_SIZE_CONTENT);  /// 1
+    lv_obj_set_height( ui_wifiSecure, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_align( ui_wifiSecure, LV_ALIGN_RIGHT_MID );
+    lv_obj_add_flag( ui_wifiSecure, LV_OBJ_FLAG_CLICKABLE );   /// Flags
+    lv_obj_remove_flag( ui_wifiSecure, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+    if (!wifi.secure){
+        lv_obj_add_flag( ui_wifiSecure, LV_OBJ_FLAG_HIDDEN );
+    }
+
+    lv_obj_add_event_cb(ui_wifiPanel, ui_event_wifi_item_click, LV_EVENT_CLICKED, NULL);
+
 }

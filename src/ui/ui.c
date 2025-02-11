@@ -3,8 +3,7 @@
 // LVGL version: 8.3.11
 // Project name: W10M
 
-#include "ui.h"
-#include "ui_helpers.h"
+#include "ui.h" 
 #include "ui_common.h"
 #include "stars.h"
 
@@ -150,6 +149,7 @@ lv_obj_t *ui_settingsBack;
 lv_obj_t *ui_settingsAppIcon;
 lv_obj_t *ui_settingsAppTitle;
 lv_obj_t *ui_personalizationPanel;
+lv_obj_t *ui_networkPanel;
 lv_obj_t *ui_systemPanel;
 lv_obj_t *ui_themePanel;
 lv_obj_t *ui_backgroundSelect;
@@ -248,10 +248,29 @@ lv_obj_t *ui_Panel23;
 lv_obj_t *ui_Image18;
 lv_obj_t *ui_Label47;
 
+lv_obj_t *ui_systemKeyboard;
+
+lv_obj_t *ui_wifiList;
+lv_obj_t * wifi_status;
+lv_obj_t * refresh_button;
+
+lv_obj_t * wifi_dialog_panel;
+lv_obj_t * wifi_dialog_text;
+lv_obj_t * wifi_dialog_textarea;
+lv_obj_t * button_close;
+lv_obj_t * button_connect;
+
+lv_obj_t * wifi_action_text;
+lv_obj_t * wifi_state_switch;
+
+void ui_event_textarea(lv_event_t *e);
+
 void ui_event____initial_actions0(lv_event_t *e);
 lv_obj_t *ui____initial_actions0;
 
 void init_custom(void);
+
+static BackButtonHandler backHandler = NULL;
 
 #ifdef MIN_BG_IMG
 const lv_img_dsc_t *ui_imgset_img[5] = {&ui_img_img1_png, &ui_img_img2_png, &ui_img_img5_png, &ui_img_img6_png, &ui_img_img8_png};
@@ -367,14 +386,12 @@ lv_obj_t *navSw;
 #if LV_COLOR_DEPTH != 16
 #error "LV_COLOR_DEPTH should be 16bit to match SquareLine Studio's settings"
 #endif
-#if LV_COLOR_16_SWAP != 1
-#error "LV_COLOR_16_SWAP should be 1 to match SquareLine Studio's settings"
-#endif
+
 
 ///////////////////// ANIMATIONS ////////////////////
 void closeNotificationPanel_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -396,7 +413,7 @@ void closeNotificationPanel_Animation(lv_obj_t *TargetObject, int delay)
 
 void openNotificationPanel_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -418,7 +435,7 @@ void openNotificationPanel_Animation(lv_obj_t *TargetObject, int delay)
 
 void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -436,7 +453,7 @@ void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_0, 2000);
     lv_anim_set_early_apply(&PropertyAnimation_0, false);
     lv_anim_start(&PropertyAnimation_0);
-    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_1_user_data->target = TargetObject;
     PropertyAnimation_1_user_data->val = -1;
     lv_anim_t PropertyAnimation_1;
@@ -454,7 +471,7 @@ void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_1, 10000);
     lv_anim_set_early_apply(&PropertyAnimation_1, false);
     lv_anim_start(&PropertyAnimation_1);
-    ui_anim_user_data_t *PropertyAnimation_2_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_2_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_2_user_data->target = TargetObject;
     PropertyAnimation_2_user_data->val = -1;
     lv_anim_t PropertyAnimation_2;
@@ -472,7 +489,7 @@ void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_2, 18000);
     lv_anim_set_early_apply(&PropertyAnimation_2, false);
     lv_anim_start(&PropertyAnimation_2);
-    ui_anim_user_data_t *PropertyAnimation_3_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_3_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_3_user_data->target = TargetObject;
     PropertyAnimation_3_user_data->val = -1;
     lv_anim_t PropertyAnimation_3;
@@ -490,7 +507,7 @@ void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_3, 26000);
     lv_anim_set_early_apply(&PropertyAnimation_3, false);
     lv_anim_start(&PropertyAnimation_3);
-    ui_anim_user_data_t *PropertyAnimation_4_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_4_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_4_user_data->target = TargetObject;
     PropertyAnimation_4_user_data->val = -1;
     lv_anim_t PropertyAnimation_4;
@@ -508,7 +525,7 @@ void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_4, 34000);
     lv_anim_set_early_apply(&PropertyAnimation_4, false);
     lv_anim_start(&PropertyAnimation_4);
-    ui_anim_user_data_t *PropertyAnimation_5_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_5_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_5_user_data->target = TargetObject;
     PropertyAnimation_5_user_data->val = -1;
     lv_anim_t PropertyAnimation_5;
@@ -530,7 +547,7 @@ void liveTileVertical6_Animation(lv_obj_t *TargetObject, int delay)
 
 void liveTileHorizontal5_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -548,7 +565,7 @@ void liveTileHorizontal5_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_0, 2000);
     lv_anim_set_early_apply(&PropertyAnimation_0, false);
     lv_anim_start(&PropertyAnimation_0);
-    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_1_user_data->target = TargetObject;
     PropertyAnimation_1_user_data->val = -1;
     lv_anim_t PropertyAnimation_1;
@@ -566,7 +583,7 @@ void liveTileHorizontal5_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_1, 10000);
     lv_anim_set_early_apply(&PropertyAnimation_1, false);
     lv_anim_start(&PropertyAnimation_1);
-    ui_anim_user_data_t *PropertyAnimation_2_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_2_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_2_user_data->target = TargetObject;
     PropertyAnimation_2_user_data->val = -1;
     lv_anim_t PropertyAnimation_2;
@@ -584,7 +601,7 @@ void liveTileHorizontal5_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_2, 18000);
     lv_anim_set_early_apply(&PropertyAnimation_2, false);
     lv_anim_start(&PropertyAnimation_2);
-    ui_anim_user_data_t *PropertyAnimation_3_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_3_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_3_user_data->target = TargetObject;
     PropertyAnimation_3_user_data->val = -1;
     lv_anim_t PropertyAnimation_3;
@@ -602,7 +619,7 @@ void liveTileHorizontal5_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_3, 26000);
     lv_anim_set_early_apply(&PropertyAnimation_3, false);
     lv_anim_start(&PropertyAnimation_3);
-    ui_anim_user_data_t *PropertyAnimation_4_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_4_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_4_user_data->target = TargetObject;
     PropertyAnimation_4_user_data->val = -1;
     lv_anim_t PropertyAnimation_4;
@@ -624,7 +641,7 @@ void liveTileHorizontal5_Animation(lv_obj_t *TargetObject, int delay)
 
 void cortanaPulse_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -642,7 +659,7 @@ void cortanaPulse_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_0, 0);
     lv_anim_set_early_apply(&PropertyAnimation_0, false);
     lv_anim_start(&PropertyAnimation_0);
-    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_1_user_data->target = TargetObject;
     PropertyAnimation_1_user_data->val = -1;
     lv_anim_t PropertyAnimation_1;
@@ -664,7 +681,7 @@ void cortanaPulse_Animation(lv_obj_t *TargetObject, int delay)
 
 void closePanelDown_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -682,7 +699,7 @@ void closePanelDown_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_0, 0);
     lv_anim_set_early_apply(&PropertyAnimation_0, false);
     lv_anim_start(&PropertyAnimation_0);
-    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_1_user_data->target = TargetObject;
     PropertyAnimation_1_user_data->val = -1;
     lv_anim_t PropertyAnimation_1;
@@ -704,7 +721,7 @@ void closePanelDown_Animation(lv_obj_t *TargetObject, int delay)
 
 void openPanelUp_Animation(lv_obj_t *TargetObject, int delay)
 {
-    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_0_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_0_user_data->target = TargetObject;
     PropertyAnimation_0_user_data->val = -1;
     lv_anim_t PropertyAnimation_0;
@@ -722,7 +739,7 @@ void openPanelUp_Animation(lv_obj_t *TargetObject, int delay)
     lv_anim_set_repeat_delay(&PropertyAnimation_0, 0);
     lv_anim_set_early_apply(&PropertyAnimation_0, false);
     lv_anim_start(&PropertyAnimation_0);
-    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_mem_alloc(sizeof(ui_anim_user_data_t));
+    ui_anim_user_data_t *PropertyAnimation_1_user_data = lv_malloc(sizeof(ui_anim_user_data_t));
     PropertyAnimation_1_user_data->target = TargetObject;
     PropertyAnimation_1_user_data->val = -1;
     lv_anim_t PropertyAnimation_1;
@@ -744,11 +761,17 @@ void openPanelUp_Animation(lv_obj_t *TargetObject, int delay)
 
 ///////////////////// HELPER ////////////////////
 
+
+void set_back_handler(BackButtonHandler handler){
+    backHandler = handler;
+}
+
+
 void show_alert(const char *title, const char *text)
 {
     lv_label_set_text(ui_alertTitle, title);
     lv_label_set_text(ui_alertText, text);
-    lv_obj_clear_flag(ui_alertPanel, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_remove_flag(ui_alertPanel, LV_OBJ_FLAG_HIDDEN);
 }
 
 void register_live(live_obj_t l)
@@ -852,24 +875,30 @@ void launch_settings(lv_event_t *e)
 {
     uint64_t code = (uint64_t)lv_event_get_user_data(e);
 
+
+    lv_obj_add_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui_personalizationPanel, LV_OBJ_FLAG_HIDDEN);
     lv_obj_add_flag(ui_systemPanel, LV_OBJ_FLAG_HIDDEN);
-    lv_obj_add_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_add_flag(ui_networkPanel, LV_OBJ_FLAG_HIDDEN);
 
     switch (code)
     {
     case 0xA700:
         /* code */
-        lv_obj_clear_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
         break;
     case 0xA701:
-        lv_obj_clear_flag(ui_systemPanel, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_systemPanel, LV_OBJ_FLAG_HIDDEN);
+        break;
+    case 0xA703:
+        onOpenNetworks();
+        lv_obj_remove_flag(ui_networkPanel, LV_OBJ_FLAG_HIDDEN);
         break;
     case 0xA704:
-        lv_obj_clear_flag(ui_personalizationPanel, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_personalizationPanel, LV_OBJ_FLAG_HIDDEN);
         break;
     default:
-        lv_obj_clear_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN);
         show_alert("Settings error", "This setting is not available at the moment");
         return;
         break;
@@ -886,7 +915,7 @@ void launch_settings(lv_event_t *e)
                 break;
             }
         }
-        lv_obj_clear_flag(ui_settingsBack, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_settingsBack, LV_OBJ_FLAG_HIDDEN);
     }
     else
     {
@@ -906,14 +935,14 @@ void action_event(lv_event_t *e)
     {
     case 0x00C3:
         // wifi
-        if (lv_obj_has_state(target, LV_STATE_CHECKED))
-        {
-            lv_obj_add_flag(ui_statusPanelWifi, LV_OBJ_FLAG_HIDDEN);
-        }
-        else
-        {
-            lv_obj_clear_flag(ui_statusPanelWifi, LV_OBJ_FLAG_HIDDEN);
-        }
+        // if (lv_obj_has_state(target, LV_STATE_CHECKED))
+        // {
+        //     lv_obj_add_flag(ui_statusPanelWifi, LV_OBJ_FLAG_HIDDEN);
+        // }
+        // else
+        // {
+        //     lv_obj_remove_flag(ui_statusPanelWifi, LV_OBJ_FLAG_HIDDEN);
+        // }
         break;
     case 0x00C4:
         // bt
@@ -923,7 +952,7 @@ void action_event(lv_event_t *e)
         }
         else
         {
-            lv_obj_clear_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_remove_flag(ui_statusPanelBluetooth, LV_OBJ_FLAG_HIDDEN);
         }
         break;
     case 0x00C8:
@@ -964,6 +993,7 @@ void theme_change(lv_event_t *e)
     for (int l = 0; l < current_txta; l++)
     {
         lv_obj_set_style_border_color(txtarea[l], lv_color_hex(color), LV_PART_MAIN | LV_STATE_DEFAULT);
+        lv_obj_set_style_border_color(txtarea[l], lv_color_hex(color), LV_PART_MAIN | LV_STATE_FOCUSED);
     }
 
     if (tint_navbar)
@@ -1018,6 +1048,20 @@ void navbar_tint(lv_event_t *e)
     }
 }
 
+void ui_event_textarea(lv_event_t *e)
+{
+    lv_obj_t *target = lv_event_get_target(e);
+    lv_event_code_t event_code = lv_event_get_code(e);
+    if (event_code == LV_EVENT_FOCUSED) {
+        lv_keyboard_set_textarea(ui_systemKeyboard, target);
+        lv_obj_remove_flag(ui_systemKeyboard, LV_OBJ_FLAG_HIDDEN);
+    }
+    if (event_code == LV_EVENT_DEFOCUSED) {
+        lv_obj_add_flag(ui_systemKeyboard, LV_OBJ_FLAG_HIDDEN);
+    }
+}
+
+
 void background_img(lv_event_t *e)
 {
     uint64_t code = (uint64_t)lv_event_get_user_data(e);
@@ -1046,7 +1090,7 @@ void background_select(lv_event_t *e)
     }
     else
     {
-        lv_obj_clear_flag(ui_backgroundSelect, LV_OBJ_FLAG_HIDDEN);
+        lv_obj_remove_flag(ui_backgroundSelect, LV_OBJ_FLAG_HIDDEN);
         lv_obj_set_style_bg_img_src(ui_homeScreen, ui_imgset_img[getPrefInt("bg_img", 5) % (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0]))], LV_PART_MAIN | LV_STATE_DEFAULT);
     }
 }
@@ -1140,7 +1184,7 @@ void ui_event_nav_home(lv_event_t *e)
             // }
             return;
         }
-        _ui_screen_change(&ui_homeScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_homeScreen_screen_init);
+        _ui_screen_change(&ui_homeScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_homeScreen_screen_init);
     }
 }
 
@@ -1169,7 +1213,22 @@ void ui_event_nav_back(lv_event_t *e)
             openNotificationPanel_Animation(ui_lockScreenPanel, 0);
             return;
         }
-        _ui_screen_change(&ui_homeScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_homeScreen_screen_init);
+        if (actScr == ui_settingsScreen){
+            if (lv_obj_has_flag(ui_settingsMainPanel, LV_OBJ_FLAG_HIDDEN)){
+                lv_event_t e;
+                e.user_data = (void *)(uint64_t)0xA700;
+                launch_settings(&e);
+                return;
+            }
+        }
+
+
+        if (backHandler){
+            backHandler();
+            return;
+        }
+        // send event to the active screen
+        _ui_screen_change(&ui_homeScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_homeScreen_screen_init);
     }
 }
 
@@ -1323,6 +1382,67 @@ void ui_event_appTitleIcon1(lv_event_t *e)
     }
 }
 
+void ui_event_app_load(lv_event_t *e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+    if (event_code == LV_EVENT_SCREEN_LOAD_START){
+        onLoadTestApp();
+    }
+}
+
+
+void ui_event_wifi_switch(lv_event_t *e)
+{
+    lv_obj_t *target = lv_event_get_target(e);
+    onWifiStateChange(lv_obj_has_state(target, LV_STATE_CHECKED));
+}
+
+void ui_event_refreshWifi(lv_event_t *e)
+{
+    onRefreshWifi();
+}
+
+
+void ui_event_wifi_item_click(lv_event_t *e){
+
+    lv_obj_t *target = lv_event_get_target(e);
+    if (target != ui_wifiList){
+        if (lv_obj_has_flag(lv_obj_get_child(target, 2), LV_OBJ_FLAG_HIDDEN))
+        {
+            // no password needed
+            lv_label_set_text(wifi_dialog_text, lv_label_get_text(lv_obj_get_child(target, 1)));
+            lv_textarea_set_text(wifi_dialog_textarea, "");
+            lv_obj_remove_flag(wifi_dialog_panel, LV_OBJ_FLAG_HIDDEN);
+            onConnectWifi();
+        } else {
+            lv_label_set_text(wifi_dialog_text, lv_label_get_text(lv_obj_get_child(target, 1)));
+            lv_textarea_set_text(wifi_dialog_textarea, "");
+            lv_obj_remove_flag(wifi_dialog_panel, LV_OBJ_FLAG_HIDDEN);
+            lv_obj_send_event(wifi_dialog_textarea, LV_EVENT_FOCUSED, NULL);
+        }
+    }
+}
+
+void ui_event_connect_wifi(lv_event_t *e){
+
+    lv_obj_send_event(wifi_dialog_textarea, LV_EVENT_DEFOCUSED, NULL);
+    lv_obj_add_flag(wifi_dialog_panel, LV_OBJ_FLAG_HIDDEN);
+    onConnectWifi();
+
+}
+
+void ui_event_close_wifi(lv_event_t *e){
+    lv_obj_add_flag(wifi_dialog_panel, LV_OBJ_FLAG_HIDDEN);
+    lv_obj_send_event(wifi_dialog_textarea, LV_EVENT_DEFOCUSED, NULL);
+}
+
+void ui_event_password_mode(lv_event_t *e)
+{
+    lv_obj_t *target = lv_event_get_target(e);
+    lv_textarea_set_password_mode(wifi_dialog_textarea, !lv_obj_has_state(target, LV_STATE_CHECKED));
+    lv_obj_send_event(wifi_dialog_textarea, LV_EVENT_FOCUSED, NULL);
+}
+
 void ui_event____initial_actions0(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -1367,6 +1487,8 @@ void ui_init(void)
 
     init_custom();
 
+
+
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_obj_add_event_cb(ui____initial_actions0, ui_event____initial_actions0, LV_EVENT_ALL, NULL);
 
@@ -1383,7 +1505,8 @@ void init_custom(void)
     {
         cm_start_tile(tiles[a], register_live, launch_app, register_start);
     }
-
+    lv_obj_t * parent = lv_obj_create(lv_screen_active());
+    lv_obj_set_parent(ui_allAppsPanel, parent);
     lv_obj_set_parent(ui_allAppsPanel, ui_startPanel);
 
     // start app list
@@ -1419,6 +1542,9 @@ void init_custom(void)
     // settings personalization
     cm_create_panel_space(ui_personalizationPanel, 10);
     cm_create_text(ui_personalizationPanel, "Accent Color");
+
+    
+    lv_obj_set_parent(ui_themePanel, parent);
     lv_obj_set_parent(ui_themePanel, ui_personalizationPanel);
     for (int a = 0; a < (sizeof(colors) / sizeof(colors[0])); a++)
     {
@@ -1431,6 +1557,7 @@ void init_custom(void)
     cm_create_panel_space(ui_personalizationPanel, 10);
     cm_create_text(ui_personalizationPanel, "Background");
     bgSel = cm_create_dropdown(ui_personalizationPanel, "None\nPicture", getPrefInt("bg_type", 1), 150, background_select);
+    lv_obj_set_parent(ui_backgroundSelect, parent);
     lv_obj_set_parent(ui_backgroundSelect, ui_personalizationPanel);
     for (int a = 0; a < (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0])); a++)
     {
@@ -1445,11 +1572,28 @@ void init_custom(void)
     cm_create_panel_space(ui_personalizationPanel, 10);
 
     cm_create_text(ui_personalizationPanel, "Lockscreen");
+    lv_obj_set_parent(ui_lockscreenSelect, parent);
     lv_obj_set_parent(ui_lockscreenSelect, ui_personalizationPanel);
     for (int a = 0; a < (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0])); a++)
     {
         cm_image_select(ui_lockscreenSelect, ui_imgset_img[a], a, lockscreen_img);
     }
+
+    cm_create_panel_space(ui_networkPanel, 10);
+    wifi_state_switch = cm_create_switch(ui_networkPanel, "WiFi", false, ui_event_wifi_switch);
+    cm_create_panel_space(ui_networkPanel, 10);
+    refresh_button = cm_create_button(ui_networkPanel, "Refresh");
+    lv_obj_add_event_cb(refresh_button, ui_event_refreshWifi, LV_EVENT_CLICKED, NULL);
+    wifi_status = cm_create_text(ui_networkPanel, "");
+    ui_wifiList = lv_obj_create(ui_networkPanel);
+    lv_obj_remove_style_all(ui_wifiList);
+    lv_obj_set_width( ui_wifiList, 280);
+    lv_obj_set_height( ui_wifiList, LV_SIZE_CONTENT);
+    lv_obj_set_align( ui_wifiList, LV_ALIGN_TOP_MID );
+    lv_obj_set_flex_flow(ui_wifiList,LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(ui_wifiList, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER);
+    lv_obj_add_flag( ui_wifiList, LV_OBJ_FLAG_CLICKABLE );
+
 
     register_img(ui_settingsAppIcon);
     register_img(ui_settingsBack);
@@ -1467,6 +1611,7 @@ void init_custom(void)
     register_img(ui_appTitleIcon);
     register_panel(ui_Panel30);
     register_txta(ui_alertDialogPanel);
+    register_txta(wifi_dialog_panel);
 
     bar = cm_create_bar(ui_appMainPanel, 25, "%d%% Percent");
     cm_create_panel_space(ui_appMainPanel, 10);
@@ -1479,6 +1624,7 @@ void init_custom(void)
         cm_ir_tile(ui_gridTempPanel);
     }
 
+
     // cm_create_switch(ui_gridTempPanel, "Alert Sound", true, NULL);
     // cm_create_text(ui_gridTempPanel, "Alert Threshold");
     // cm_create_panel_space(ui_gridTempPanel, 5);
@@ -1486,6 +1632,12 @@ void init_custom(void)
 
 
     // Load saved preferences
+    load_prefs();
+}
+
+void load_prefs(){
+
+    lv_obj_move_to_index(ui_allAppsPanel, lv_obj_get_child_count(ui_startPanel) - 1);
 
     lv_obj_set_style_bg_img_src(ui_homeScreen, ui_imgset_img[getPrefInt("bg_img", 5) % (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0]))], LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_img_src(ui_lockScreenPanel, ui_imgset_img[getPrefInt("lock_img", 2) % (sizeof(ui_imgset_img) / sizeof(ui_imgset_img[0]))], LV_PART_MAIN | LV_STATE_DEFAULT);
@@ -1494,16 +1646,16 @@ void init_custom(void)
     e.user_data = (void *)(uint64_t)getPrefInt("theme_color", 0x0050EF);
     theme_change(&e);
 
-    e.target = navSl;
+    e.original_target = navSl;
     e.user_data = (void *)(uint64_t)getPrefInt("nav_opa", 200);
     navbar_opacity(&e);
 
-    e.target = startSl;
+    e.original_target = startSl;
     e.user_data = (void *)(uint64_t)getPrefInt("start_opa", 200);
     start_opacity(&e);
 
     lv_dropdown_set_selected(bgSel, getPrefInt("bg_type", 1));
-    e.target = bgSel;
+    e.original_target = bgSel;
     background_select(&e);
 
     if (getPrefBool("nav_tint", false))
@@ -1512,11 +1664,18 @@ void init_custom(void)
     }
     else
     {
-        lv_obj_clear_state(navSw, LV_STATE_CHECKED);
+        lv_obj_remove_state(navSw, LV_STATE_CHECKED);
     }
-    e.target = navSw;
+    e.original_target = navSw;
     navbar_tint(&e);
+
+    if (getPrefInt("wifi_state", 0)){
+        lv_obj_add_state(wifi_state_switch, LV_STATE_CHECKED);
+    } else {
+        lv_obj_remove_state(wifi_state_switch, LV_STATE_CHECKED);
+    }
 
     // e.user_data = (void*)(uint64_t)getPrefInt("start_opa", 200);
     // start_opacity(&e);
 }
+
